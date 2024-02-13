@@ -4,8 +4,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 import com.vtxlab.project.bc_crypto_coingecko.config.RedisUtils;
 import com.vtxlab.project.bc_crypto_coingecko.entity.CoingeckoEntity;
 import com.vtxlab.project.bc_crypto_coingecko.infra.Currency;
@@ -33,33 +35,34 @@ public class CoingeckoServiceImpl implements CoingeckoService {
   @Autowired
   private Mapper mapper;
 
-  // @Autowired
-  // @Qualifier("coingeckoUriBuilder")
-  // private UriComponentsBuilder uriComponentsBuilder;
+  @Autowired
+  @Qualifier("coingeckoUriBuilder")
+  private UriComponentsBuilder coingeckoUriBuilder;
 
-  private String uri =
-      "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false&locale=en";
+  // private String uri =
+  // "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false&locale=en";
 
   @Override
   public List<Coingecko> getDataFromApi() {
-    // log.info("Service : " + uriComponentsBuilder.toUriString());
-    List<Coingecko> rawData =
-        Arrays.stream(restTemplate.getForObject(uri, Coingecko[].class))
-            .collect(Collectors.toList());
+    List<Coingecko> rawData = Arrays.asList(this.getCoinMarket());//
     for (Coingecko data : rawData) {
       CoingeckoEntity coingeckoEntity = mapper.mapToEntity(data);
       this.setDataToRedis(data);
       coingeckoRepo.save(coingeckoEntity);
     }
 
-    return Arrays.stream(restTemplate.getForObject(uri, Coingecko[].class))
-        .collect(Collectors.toList());
+    return rawData;
+  }
+
+  private Coingecko[] getCoinMarket() {
+    return restTemplate.getForObject(coingeckoUriBuilder.toUriString(),
+        Coingecko[].class);
   }
 
   private boolean setDataToRedis(Coingecko data) { // btc , eth
     CoingeckoDTO coingeckoDTO = mapper.map(this.getDataFromApi().stream()//
-        .filter(e -> Currency.BTC.name().equals(e.getId())
-            || Currency.ETH.name().equals(e.getId()))//
+        .filter(e -> Currency.BTC.name().toLowerCase().equals(e.getSymbol())
+            || Currency.ETH.name().toLowerCase().equals(e.getSymbol()))//
         .findFirst()//
         .get());
 

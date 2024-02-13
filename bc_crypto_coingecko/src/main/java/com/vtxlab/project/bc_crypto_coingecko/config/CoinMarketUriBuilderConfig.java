@@ -8,7 +8,9 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.util.UriComponentsBuilder;
 import com.vtxlab.project.bc_crypto_coingecko.infra.ApiUtil;
 import com.vtxlab.project.bc_crypto_coingecko.infra.UriScheme;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Configuration
 public class CoinMarketUriBuilderConfig {
 
@@ -21,8 +23,8 @@ public class CoinMarketUriBuilderConfig {
   @Value("${api.coingecko.path}")
   private String path;
 
-  @Value("${api.coingecko.coins.markets}")
-  private String coinsMarkets;
+  @Value("${api.coingecko.endpoint}")
+  private String endpoint;
 
   @Value("${api.coingecko.coins.vs_currency}")
   private String coinsVsCurrency;
@@ -45,14 +47,12 @@ public class CoinMarketUriBuilderConfig {
   @Bean
   UriComponentsBuilder coingeckoUriBuilder() {
     MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
-    queryParams.add("markets", coinsMarkets);
     queryParams.add("vs_currency", coinsVsCurrency);
     queryParams.add("order", coinsOrder);
     queryParams.add("per_page", coinsPerPage);
     queryParams.add("page", coinsPage);
     queryParams.add("sparkline", coinsSparkline);
     queryParams.add("locale", coinsLocale);
-
-    return ApiUtil.uriBuilder(UriScheme.HTTP, domain, path, queryParams );
+    return ApiUtil.uriBuilder(UriScheme.HTTPS, domain, path,endpoint, queryParams);
   }
 }
