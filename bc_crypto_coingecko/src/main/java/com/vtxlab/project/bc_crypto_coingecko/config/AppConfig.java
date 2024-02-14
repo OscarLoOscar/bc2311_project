@@ -1,5 +1,6 @@
 package com.vtxlab.project.bc_crypto_coingecko.config;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -18,8 +19,14 @@ public class AppConfig {
   }
 
   @Bean
-   RedisTemplate<String, Object> redisTemplate(
-      RedisConnectionFactory factory, ObjectMapper redisObjectMapper) {
+  ModelMapper modelMapper() {
+    return new ModelMapper();
+  }
+  
+
+  @Bean
+  RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory factory,
+      ObjectMapper redisObjectMapper) {
     RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
     redisTemplate.setConnectionFactory(factory);
     redisTemplate.setKeySerializer(new StringRedisSerializer());

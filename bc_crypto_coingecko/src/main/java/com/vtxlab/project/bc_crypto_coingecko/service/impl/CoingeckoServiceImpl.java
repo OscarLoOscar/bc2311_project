@@ -10,7 +10,8 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 import com.vtxlab.project.bc_crypto_coingecko.config.RedisUtils;
 import com.vtxlab.project.bc_crypto_coingecko.entity.CoingeckoEntity;
-import com.vtxlab.project.bc_crypto_coingecko.infra.Currency;
+import com.vtxlab.project.bc_crypto_coingecko.infra.TraditionCurrency;
+import com.vtxlab.project.bc_crypto_coingecko.infra.CryptoCurrency;
 import com.vtxlab.project.bc_crypto_coingecko.infra.Mapper;
 import com.vtxlab.project.bc_crypto_coingecko.model.Coingecko;
 import com.vtxlab.project.bc_crypto_coingecko.model.CoingeckoDTO;
@@ -28,7 +29,6 @@ public class CoingeckoServiceImpl implements CoingeckoService {
   @Autowired
   private CoingeckoRepo coingeckoRepo;
 
-
   @Autowired
   private RedisUtils redisUtils;
 
@@ -39,39 +39,36 @@ public class CoingeckoServiceImpl implements CoingeckoService {
   @Qualifier("coingeckoUriBuilder")
   private UriComponentsBuilder coingeckoUriBuilder;
 
-  // private String uri =
-  // "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false&locale=en";
-
   @Override
   public List<Coingecko> getDataFromApi() {
-    List<Coingecko> rawData = Arrays.asList(this.getCoinMarket());//
-    for (Coingecko data : rawData) {
-      CoingeckoEntity coingeckoEntity = mapper.mapToEntity(data);
-      this.setDataToRedis(data);
-      coingeckoRepo.save(coingeckoEntity);
-    }
+    List<Coingecko> rawData = this.getCoinMarket();
+
+    List<CoingeckoEntity> entities = rawData.stream()
+        .filter(coin -> Arrays.stream(CryptoCurrency.values())
+            .anyMatch(e -> e.name().toLowerCase().equals(coin.getSymbol())))//
+        .map(e -> mapper.mapToEntity(e))//
+        .collect(Collectors.toList());
+
+    log.info("entities : " + entities.size());
+    coingeckoRepo.saveAll(entities);
+    log.info("After saveAll");
+    this.setDataToRedis(entities);
+    log.info("After save to redis");
 
     return rawData;
   }
 
-  private Coingecko[] getCoinMarket() {
-    return restTemplate.getForObject(coingeckoUriBuilder.toUriString(),
-        Coingecko[].class);
+  private List<Coingecko> getCoinMarket() {
+    return Arrays.asList(restTemplate
+        .getForObject(coingeckoUriBuilder.toUriString(), Coingecko[].class));
   }
 
-  private boolean setDataToRedis(Coingecko data) { // btc , eth
-    CoingeckoDTO coingeckoDTO = mapper.map(this.getDataFromApi().stream()//
-        .filter(e -> Currency.BTC.name().toLowerCase().equals(e.getSymbol())
-            || Currency.ETH.name().toLowerCase().equals(e.getSymbol()))//
-        .findFirst()//
-        .get());
+  private void setDataToRedis(List<CoingeckoEntity> entities) {
+    List<CoingeckoDTO> coingeckoDTOs =
+        entities.stream().map(e -> mapper.map(e)).collect(Collectors.toList());
 
-    if (Currency.BTC.name().equals(coingeckoDTO.getId())) {
-      redisUtils.set("BC2311_" + Currency.BTC.name(), coingeckoDTO);
-      return true;
-    } else {
-      redisUtils.set("BC2311_" + Currency.ETH.name(), coingeckoDTO);
-      return true;
-    }
+    coingeckoDTOs.forEach(coin -> {
+      redisUtils.set("BC2311_" + coin.getSymbol(), coin);
+    });
   }
 }

@@ -48,11 +48,15 @@ public class CoinMarketUriBuilderConfig {
   UriComponentsBuilder coingeckoUriBuilder() {
     MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
     queryParams.add("vs_currency", coinsVsCurrency);
-    queryParams.add("order", coinsOrder);
-    queryParams.add("per_page", coinsPerPage);
-    queryParams.add("page", coinsPage);
-    queryParams.add("sparkline", coinsSparkline);
-    queryParams.add("locale", coinsLocale);
-    return ApiUtil.uriBuilder(UriScheme.HTTPS, domain, path,endpoint, queryParams);
+    queryParams.add("coingeckoKey", coingeckoKey);
+    // queryParams.add("order", coinsOrder);
+    // queryParams.add("per_page", coinsPerPage);
+    // queryParams.add("page", coinsPage);
+    // queryParams.add("sparkline", coinsSparkline);
+    // queryParams.add("locale", coinsLocale);
+    log.info("coingeckoUriBuilder " + ApiUtil.uriBuilder(UriScheme.HTTPS,
+        domain, path, endpoint, queryParams));
+    return ApiUtil.uriBuilder(UriScheme.HTTPS, domain, path, endpoint,
+        queryParams);
   }
 }
