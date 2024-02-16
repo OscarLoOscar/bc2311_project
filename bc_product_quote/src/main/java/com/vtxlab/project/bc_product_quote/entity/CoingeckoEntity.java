@@ -1,4 +1,4 @@
-package com.vtxlab.project.bc_crypto_coingecko.entity;
+package com.vtxlab.project.bc_product_quote.entity;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;

@@ -1,12 +1,13 @@
-package com.vtxlab.project.bc_crypto_coingecko;
+package com.vtxlab.project.bc_product_quote;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class BcCryptoCoingeckoApplication {
+public class BcProductQuoteApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(BcCryptoCoingeckoApplication.class, args);
+		SpringApplication.run(BcProductQuoteApplication.class, args);
 	}
+
 }

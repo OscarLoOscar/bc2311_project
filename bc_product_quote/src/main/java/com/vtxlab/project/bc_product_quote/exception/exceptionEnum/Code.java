@@ -1,4 +1,4 @@
-package com.vtxlab.project.bc_crypto_coingecko.exception.exceptionEnum;
+package com.vtxlab.project.bc_product_quote.exception.exceptionEnum;
 
 import lombok.Getter;
 

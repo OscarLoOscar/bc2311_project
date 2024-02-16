@@ -10,9 +10,9 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.vtxlab.project</groupId>
-	<artifactId>bc_crypto_coingecko</artifactId>
+	<artifactId>bc_stock_finnhub</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>bc_crypto_coingecko</name>
+	<name>bc_stock_finnhub</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
 		<java.version>17</java.version>
@@ -29,6 +29,7 @@
 			<scope>runtime</scope>
 			<optional>true</optional>
 		</dependency>
+		
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>

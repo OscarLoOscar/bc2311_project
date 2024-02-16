@@ -11,7 +11,6 @@ public class CoingeckoDTO {
   private String id;
   private String symbol;
   private String name;
-  private String image;
 
   @JsonProperty("current_price")
   private double currentPrice;

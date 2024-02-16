@@ -1,0 +1,28 @@
+api:
+  bc_crypto_coingecko:
+    port: 8082
+    domain: localhost
+    path: /api/v1/coingecko/
+  bc_stock_finnhub:
+    port: 8083
+    domain: localhost
+    path: /stock/finnhub/api/v1
+    quote:
+      endpoint: quote
+    profile:
+      endpoint: profile2
+  symbols: AAPL,MSFT,GOOGL
+
+  #MySQL Config
+spring.datasource:
+  driver-class-name: com.mysql.cj.jdbc.Driver
+  url: jdbc:mysql://localhost:3306/bc2311project
+  username: oscarlo
+  password: oscarVenturenixLab2023.
+spring.jpa:
+  show-sql: true
+  hibernate.ddl-auto: update # create-drop
+spring.sql.init:
+  mode: always # always
+  platform: mysql
+spring.profiles.active: enableScheduling

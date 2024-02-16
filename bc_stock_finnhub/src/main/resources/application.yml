@@ -1,27 +1,26 @@
 server:
-  port: 8082
+  port: 8083
 
 api:
-  coingecko:
-    key: CG-s43w3741nsRt1x5T69gEA6S9
-    domain: api.coingecko.com
-    path: /api/v3
-    endpoint: /coins/markets
-    coins:
-      vs_currency: usd
-      order: market_cap_desc
-      per_page: 100
-      page: 1
-      sparkline: false
-      locale: en
-# https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&x_cg_demo_api_key=CG-s43w3741nsRt1x5T69gEA6S9
+  finnhub:
+    token: cju3it9r01qr958213c0cju3it9r01qr958213cg
+    # https://finnhub.io/api/v1/quote?symbol=AAPL&token=cju3it9r01qr958213c0cju3it9r01qr958213cg
+    domain: finnhub.io
+    path: /api/v1
+    symbol: AAPL,MSFT,NVDA
+    quote:
+      endpoint: quote
+     # https://finnhub.io/api/v1/stock/profile2?symbol=AAPL&token=cju3it9r01qr958213c0cju3it9r01qr958213cg
+    profile2:
+      endpoint: stock/profile2
 
 redis-key:
-  crypto:
-    coingecko:
-      coins-markets:
-        currency: USD
-        coin-ids: btc,eth
+  stock:
+    finnhub:
+      quote:
+        symbol: AAPL,MSFT,NVDA
+      profile2:
+        symbol: AAPL,MSFT,NVDA
 
 spring.data.redis:
   host: localhost

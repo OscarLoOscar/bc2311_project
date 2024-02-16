@@ -1,13 +1,13 @@
-package com.vtxlab.project.bc_crypto_coingecko.exception.handler;
+package com.vtxlab.project.bc_stock_finnhub.exception.handler;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import com.vtxlab.project.bc_crypto_coingecko.exception.ApiResp;
-import com.vtxlab.project.bc_crypto_coingecko.exception.BusinessException;
-import com.vtxlab.project.bc_crypto_coingecko.exception.RestClientException;
-import com.vtxlab.project.bc_crypto_coingecko.exception.exceptionEnum.Code;
+import com.vtxlab.project.bc_stock_finnhub.exception.ApiResp;
+import com.vtxlab.project.bc_stock_finnhub.exception.BusinessException;
+import com.vtxlab.project.bc_stock_finnhub.exception.RestClientException;
+import com.vtxlab.project.bc_stock_finnhub.exception.exceptionEnum.Code;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
