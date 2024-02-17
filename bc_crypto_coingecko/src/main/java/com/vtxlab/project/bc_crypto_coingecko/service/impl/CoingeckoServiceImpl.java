@@ -46,8 +46,11 @@ public class CoingeckoServiceImpl implements CoingeckoService {
   }
 
   @Override
-  public List<Coingecko> getDataFromApi() {
-    List<Coingecko> rawData = getCoinMarket();
+  public List<Coingecko> getDataFromApi(String currency, String ids) {
+    List<String> inputCoinIdList = Arrays.asList(ids.split(","));
+    List<Coingecko> rawData = getCoinMarket().stream()
+        .filter(coin -> inputCoinIdList.contains(coin.getId()))
+        .collect(Collectors.toList());
 
     List<String> coinIdList = Arrays.asList(coinIds.split(","));
     log.info(coinIdList.size() + " size");
@@ -66,6 +69,7 @@ public class CoingeckoServiceImpl implements CoingeckoService {
   }
 
   private List<Coingecko> getCoinMarket() {
+    log.info("coingeckoUriBuilder : " + coingeckoUriBuilder.toUriString());
     return Arrays.asList(restTemplate
         .getForObject(coingeckoUriBuilder.toUriString(), Coingecko[].class));
   }

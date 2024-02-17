@@ -11,15 +11,15 @@ import com.vtxlab.project.bc_crypto_coingecko.model.Coingecko;
 import com.vtxlab.project.bc_crypto_coingecko.service.CoingeckoService;
 
 @RestController
-@RequestMapping("/api/v1/coingecko")
+@RequestMapping("/crypto/coingecko/api/v1")
 public class CoingeckoController implements CoingeckoOperation {
 
   @Autowired
   private CoingeckoService coingeckoService;
 
   @Override
-  public ApiResp<List<Coingecko>> getAllData() {
-    List<Coingecko> data = coingeckoService.getDataFromApi();
+  public ApiResp<List<Coingecko>> getAllData(String currency, String ids) {
+    List<Coingecko> data = coingeckoService.getDataFromApi(currency,ids);
     return ApiResp.<List<Coingecko>>builder()//
         .code(Code.OK.getCode())//
         .message(Code.OK.getMessage())//

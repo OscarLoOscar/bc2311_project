@@ -52,18 +52,17 @@ public class FinnhubServiceImpl implements FinnhubService {
   }
 
   private Quote getQuoteFromApi(String symbol) {
-    log.info("Service "
-        + finnhubQuoteUriBuilder.queryParam("symbol", symbol).toUriString());
-    return restTemplate.getForObject(
-        finnhubQuoteUriBuilder.queryParam("symbol", symbol).toUriString(),
-        Quote.class);
+    UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(finnhubQuoteUriBuilder.toUriString());
+    builder.replaceQueryParam("symbol", symbol);
+    log.info("getQuoteFromApi Service :" + builder.toUriString());
+    return restTemplate.getForObject(builder.toUriString(), Quote.class);
   }
 
   private CompanyProfile getProfileFromApi(String symbol) {
-    log.info("Service " + finnhubCompanyProfileUriBuilder
-        .queryParam("symbol", symbol).toUriString());
-    return restTemplate.getForObject(finnhubCompanyProfileUriBuilder
-        .queryParam("symbol", symbol).toUriString(), CompanyProfile.class);
+    UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(finnhubCompanyProfileUriBuilder.toUriString());
+    builder.replaceQueryParam("symbol", symbol);
+    log.info("getProfileFromApi Service :" + builder.toUriString());
+    return restTemplate.getForObject(builder.toUriString(), CompanyProfile.class);
   }
 
   @Override

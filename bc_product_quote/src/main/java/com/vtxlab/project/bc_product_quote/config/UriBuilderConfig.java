@@ -7,68 +7,59 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.util.UriComponentsBuilder;
 import com.vtxlab.project.bc_product_quote.infra.ApiUtil;
 import com.vtxlab.project.bc_product_quote.infra.UriScheme;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Configuration
 public class UriBuilderConfig {
 
-  @Value("${api.bc_crypto_coingecko.port}")
-  private int coingeckoPort;
 
   @Value("${api.bc_crypto_coingecko.domain}")
   private String coingeckoDomain;
 
-  @Value("${api.bc_crypto_coingecko.path}")
-  private String coingeckoPath;
+  @Value("${api.bc_crypto_coingecko.endpoints.currency}")
+  private String coingeckoCurrency;
 
-  @Value("${api.bc_stock_finnhub.port}")
-  private int finnhubPort;
+  @Value("${api.bc_crypto_coingecko.endpoints.ids}")
+  private String coingeckoIds;
 
   @Value("${api.bc_stock_finnhub.domain}")
   private String finnhubDomain;
 
-  @Value("${api.bc_stock_finnhub.path}")
-  private String finnhubPath;
-
-  @Value("${api.bc_stock_finnhub.quote.endpoint}")
-  private String finnhubQuoteEndpoint;
-
-  @Value("${api.bc_stock_finnhub.profile.endpoint}")
-  private String finnhubProfileEndpoint;
-
-  @Value("${api.symbols}")
+  @Value("${api.bc_stock_finnhub.symbols}")
   private String symbolList;
 
   @Bean
-  public String coingeckoUriString() {
-    return coingeckoUriBuilder().toUriString();
+  public UriComponentsBuilder coingeckoUriString() {
+    return coingeckoUriBuilder();
   }
 
   @Bean
-  public String finnhubQuoteUriString() {
-    return finnhubQuoteUriBuilder().toUriString();
+  public UriComponentsBuilder finnhubStockUriString() {
+    return finnhubStockUriBuilder();
   }
 
   private UriComponentsBuilder coingeckoUriBuilder() {
-    return createUriBuilder(coingeckoDomain, coingeckoPort, coingeckoPath);
+    log.info("coingeckoDomain : "+coingeckoDomain);
+    return createCoingeckoUriBuilder(coingeckoDomain);
   }
 
-  private UriComponentsBuilder finnhubQuoteUriBuilder() {
-    List<String> symbols = List.of(symbolList.split(","));
-    return createUriBuilder(finnhubDomain, finnhubPort, finnhubPath,
-        finnhubQuoteEndpoint, symbols);
+  private UriComponentsBuilder finnhubStockUriBuilder() {
+    log.info("finnhubDomain : " +finnhubDomain);
+    return createFinnhubUriBuilder(finnhubDomain);
   }
 
-  private UriComponentsBuilder createUriBuilder(String domain, int port,
-      String path) {
-    UriComponentsBuilder builder =
-        ApiUtil.uriBuilder(UriScheme.HTTP, domain, String.valueOf(port), path);
+  private UriComponentsBuilder createCoingeckoUriBuilder(String domain) {
+    UriComponentsBuilder builder = ApiUtil.uriBuilder(UriScheme.HTTP, domain);
+    builder.queryParam("currency", coingeckoCurrency);
+    builder.queryParam("ids", coingeckoIds);
+    log.info("CoingeckoUriBuilder : " + builder.toUriString());
     return builder;
   }
 
-  private UriComponentsBuilder createUriBuilder(String domain, int port,
-      String path, String endpoint, List<String> symbols) {
-    UriComponentsBuilder builder = ApiUtil.uriBuilder(UriScheme.HTTP, domain,
-        String.valueOf(port), path, endpoint).queryParam("symbol", symbols);
+  private UriComponentsBuilder createFinnhubUriBuilder(String domain) {
+    UriComponentsBuilder builder = ApiUtil.uriBuilder(UriScheme.HTTP, domain);
+    log.info("finnhubQuoteUriBuilder : " + builder.toUriString());
     return builder;
   }
 }

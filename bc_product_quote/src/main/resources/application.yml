@@ -1,17 +1,13 @@
 api:
   bc_crypto_coingecko:
-    port: 8082
-    domain: localhost
-    path: /api/v1/coingecko/
+    domain: localhost:8082/crypto/coingecko/api/v1
+    endpoints:
+      currency: usd
+      ids: bitcoin,ethereum
   bc_stock_finnhub:
-    port: 8083
-    domain: localhost
-    path: /stock/finnhub/api/v1
-    quote:
-      endpoint: quote
-    profile:
-      endpoint: profile2
-  symbols: AAPL,MSFT,GOOGL
+    domain: localhost:8083/stock/finnhub/api/v1/getStock
+    symbols: AAPL,MSFT,NVDA
+
 
   #MySQL Config
 spring.datasource:

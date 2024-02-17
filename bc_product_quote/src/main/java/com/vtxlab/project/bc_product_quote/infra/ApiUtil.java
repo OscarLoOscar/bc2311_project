@@ -36,4 +36,18 @@ public class ApiUtil {
         .path(endpoint);
   }
 
+  public static UriComponentsBuilder uriBuilder(UriScheme uriScheme,
+      String domain) {
+    return UriComponentsBuilder.newInstance()//
+        .scheme(uriScheme.getProtocol())//
+        .host(domain);
+  }
+
+  public static UriComponentsBuilder uriBuilder(UriScheme http, String domain,
+      String endpoint) {
+    return UriComponentsBuilder.newInstance()//
+        .scheme(http.getProtocol())//
+        .host(domain)//
+        .pathSegment(endpoint.split("/"));
+  }
 }

@@ -5,5 +5,5 @@ import com.vtxlab.project.bc_crypto_coingecko.model.Coingecko;
 
 public interface CoingeckoService {
 
-  List<Coingecko> getDataFromApi();
+  List<Coingecko> getDataFromApi(String currency, String ids);
 }
