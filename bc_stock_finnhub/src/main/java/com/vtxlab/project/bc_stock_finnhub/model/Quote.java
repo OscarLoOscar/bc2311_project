@@ -1,11 +1,15 @@
 package com.vtxlab.project.bc_stock_finnhub.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Quote {
   @JsonProperty("Current_Price")
   private Long c;
@@ -21,4 +25,6 @@ public class Quote {
   private Long o;
   @JsonProperty("Previous_Close_Price")
   private Long pc;
+  @JsonProperty("Timestamp")
+  private Integer t;
 }

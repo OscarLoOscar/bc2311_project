@@ -9,12 +9,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Component
 public class RedisUtils {
   // 直接用RedisTemplate操作Redis，需要很多行代码，因此直接封装好一个RedisUtil，这样写代码更方便点。这个RedisUtil交给Spring容器实例化，使用时直接注解注入。
   @Autowired
   private RedisTemplate<String, Object> redisTemplate;
+
+  @Autowired
+  private ObjectMapper objectMapper = new ObjectMapper();
   // =============================common============================
 
   /**
@@ -87,6 +94,17 @@ public class RedisUtils {
    */
   public Object get(String key) {
     return key == null ? null : redisTemplate.opsForValue().get(key);
+  }
+
+  /**
+   * 普通缓存获取
+   *
+   * @param key 键
+   * @return 值
+   */
+  public <T> T get(String key, Class<T> clazz) throws JsonProcessingException {
+    String value = (String) this.redisTemplate.opsForValue().get(key);
+    return objectMapper.readValue(value, clazz);
   }
 
   /**

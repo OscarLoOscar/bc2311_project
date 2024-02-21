@@ -74,10 +74,14 @@ public class FinnhubController implements FinnhubOperation {
         .build();
   }
 
-  private boolean symbolIsValid(String symbol) {
-    List<String> symbols = Arrays.asList(symbolList.split(","));
+  public boolean symbolIsValid(String symbol) {
+    List<String> symbols = this.getSymbolList();
     log.info("SIZE : " + symbols.size());
     return symbols.contains(symbol);
 
+  }
+
+  public List<String> getSymbolList() {
+    return Arrays.asList(symbolList.split(","));
   }
 }

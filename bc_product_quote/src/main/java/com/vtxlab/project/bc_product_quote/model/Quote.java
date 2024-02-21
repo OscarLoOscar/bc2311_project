@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class StockDTO {
+public class Quote {
   private Integer code;
   private String message;
   private Data data;
@@ -21,21 +21,19 @@ public class StockDTO {
   @Getter
   @Builder
   public static class Data {
-    private String name;
-    private String ticker;
     @JsonProperty("Current_Price")
-    private int currentPrice;
+    private Long c;
     @JsonProperty("Change")
-    private int change;
+    private Long d;
     @JsonProperty("Percent_Change")
-    private int percentChange;
+    private Long dp;
     @JsonProperty("High_Price_Of_The_Day")
-    private int highPriceOfTheDay;
+    private Long h;
     @JsonProperty("Low_Price_Of_The_Day")
-    private int lowPriceOfTheDay;
+    private Long l;
     @JsonProperty("Open_Price_Of_The_Day")
-    private int openPriceOfTheDay;
+    private Long o;
     @JsonProperty("Previous_Close_Price")
-    private int previousClosePrice;
+    private Long pc;
   }
 }

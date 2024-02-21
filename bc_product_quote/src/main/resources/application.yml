@@ -5,20 +5,26 @@ api:
       currency: usd
       ids: bitcoin,ethereum
   bc_stock_finnhub:
-    domain: localhost:8083/stock/finnhub/api/v1/getStock
+    domain: localhost:8083/stock/finnhub/api/v1/
+    endpoint:
+      quote: quote
+      profile: profile2
+      stock: getStock
     symbols: AAPL,MSFT,NVDA
 
-
-  #MySQL Config
-spring.datasource:
-  driver-class-name: com.mysql.cj.jdbc.Driver
-  url: jdbc:mysql://localhost:3306/bc2311project
-  username: oscarlo
-  password: oscarVenturenixLab2023.
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/bc2311
+    username: "postgres"
+    password: "admin1234"
+    driver-class-name: "org.postgresql.Driver"
 spring.jpa:
   show-sql: true
   hibernate.ddl-auto: update # create-drop
-spring.sql.init:
-  mode: always # always
-  platform: mysql
-spring.profiles.active: enableScheduling
+  properties:
+    hibernate:
+      dialect: org.hibernate.dialect.PostgreSQLDialect
+      format_sql: true
+      default_schema: bc2311
+      jdbc:
+        time_zone: UTC

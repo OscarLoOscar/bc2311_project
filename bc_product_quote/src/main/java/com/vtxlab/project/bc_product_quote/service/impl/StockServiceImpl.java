@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 import com.vtxlab.project.bc_product_quote.infra.Mapper;
+import com.vtxlab.project.bc_product_quote.model.CompanyProfile;
+import com.vtxlab.project.bc_product_quote.model.Quote;
 import com.vtxlab.project.bc_product_quote.model.StockDTO;
 import com.vtxlab.project.bc_product_quote.service.StockService;
 import lombok.extern.slf4j.Slf4j;
@@ -18,9 +20,6 @@ public class StockServiceImpl implements StockService {
   private RestTemplate restTemplate;
 
   @Autowired
-  private Mapper mapper;
-
-  @Autowired
   @Qualifier("coingeckoUriString")
   private UriComponentsBuilder coingeckoUriString;
 
@@ -28,10 +27,37 @@ public class StockServiceImpl implements StockService {
   @Qualifier("finnhubStockUriString")
   private UriComponentsBuilder finnhubStockUriString;
 
+  @Autowired
+  @Qualifier("finnhubQuoteUriString")
+  private UriComponentsBuilder finnhubQuoteUriString;
+
+  @Autowired
+  @Qualifier("finnhubProfileUriString")
+  private UriComponentsBuilder finnhubProfileUriString;
+
   public StockDTO getStock(String symbol) {
-log.info("Service : " + finnhubStockUriString.replaceQueryParam("symbol",symbol).build(false).toUriString());
-    return restTemplate.getForObject(
-        finnhubStockUriString.replaceQueryParam("symbol",symbol).build(false).toUriString(),
+    log.info("Service stock: " + finnhubStockUriString
+        .replaceQueryParam("symbol", symbol).build(false).toUriString());
+    return restTemplate.getForObject(finnhubStockUriString
+        .replaceQueryParam("symbol", symbol).build(false).toUriString(),
         StockDTO.class);
+  }
+
+  @Override
+  public Quote getQuote(String symbol) {
+    log.info("Service stock: " + finnhubQuoteUriString
+        .replaceQueryParam("symbol", symbol).build(false).toUriString());
+    return restTemplate.getForObject(finnhubQuoteUriString
+        .replaceQueryParam("symbol", symbol).build(false).toUriString(),
+        Quote.class);
+  }
+
+  @Override
+  public CompanyProfile getProfile(String symbol) {
+    log.info("Service stock: " + finnhubProfileUriString
+        .replaceQueryParam("symbol", symbol).build(false).toUriString());
+    return restTemplate.getForObject(finnhubProfileUriString
+        .replaceQueryParam("symbol", symbol).build(false).toUriString(),
+        CompanyProfile.class);
   }
 }

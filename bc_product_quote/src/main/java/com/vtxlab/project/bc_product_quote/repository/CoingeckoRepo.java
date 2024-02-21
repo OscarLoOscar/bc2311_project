@@ -1,8 +1,8 @@
-// package com.vtxlab.project.bc_crypto_coingecko.repository;
+package com.vtxlab.project.bc_product_quote.repository;
 
-// import org.springframework.data.jpa.repository.JpaRepository;
-// import com.vtxlab.project.bc_crypto_coingecko.entity.CoingeckoEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
+import com.vtxlab.project.bc_product_quote.entity.CoingeckoEntity;
 
-// public interface CoingeckoRepo extends JpaRepository<CoingeckoEntity, Long>{
+public interface CoingeckoRepo extends JpaRepository<CoingeckoEntity, Long>{
   
-// }
+}

@@ -22,7 +22,6 @@ public class AppConfig {
   ModelMapper modelMapper() {
     return new ModelMapper();
   }
-  
 
   @Bean
   RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory factory,
@@ -41,4 +40,9 @@ public class AppConfig {
       ObjectMapper redisObjectMapper) {
     return new RedisHelper(factory, redisObjectMapper);
   }
+  // @Bean
+  // public RedisHelper2<Object> redisHelper(RedisConnectionFactory factory) {
+  // RedisTemplate<String, Object> redisTemplate = RedisHelper2.template(factory, Object.class);
+  // return new RedisHelper2<>(redisTemplate);
+  // }
 }

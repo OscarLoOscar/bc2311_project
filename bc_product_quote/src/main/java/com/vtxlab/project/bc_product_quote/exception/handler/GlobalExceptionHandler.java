@@ -12,46 +12,42 @@ import com.vtxlab.project.bc_product_quote.exception.exceptionEnum.Code;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-  // @ExceptionHandler(value = RestClientException.class)
-  // @ResponseStatus(value = HttpStatus.SERVICE_UNAVAILABLE) // 503
-  // public ApiResp<Void> bc2311ExceptionHandler(RestClientException e) {
-  //   return ApiResp.<Void>builder() //
-  //       .code(Code.COINGECKO_SERVICE_UNAVAILABLE.getCode()) //
-  //       .message(e.getMessage())//
-  //       // .data(null) //
-  //       .build();
-  // }
+  @ExceptionHandler(value = RestClientException.class)
+  @ResponseStatus(value = HttpStatus.SERVICE_UNAVAILABLE) // 503
+  public ApiResp<Void> bc2311ExceptionHandler(RestClientException e) {
+    return ApiResp.<Void>builder() //
+        .code(Code.COINGECKO_SERVICE_UNAVAILABLE.getCode()) //
+        .message(e.getMessage())//
+        .build();
+  }
 
 
-  // @ExceptionHandler(value = BusinessException.class)
-  // @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-  // public ApiResp<Void> bc2311ExceptionHandler(BusinessException e) {
-  //   return ApiResp.<Void>builder() //
-  //       .code(e.getCode().getCode()) //
-  //       .message(e.getMessage())//
-  //       // .data(null) //
-  //       .build();
-  // }
+  @ExceptionHandler(value = BusinessException.class)
+  @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+  public ApiResp<Void> bc2311ExceptionHandler(BusinessException e) {
+    return ApiResp.<Void>builder() //
+        .code(e.getCode().getCode()) //
+        .message(e.getMessage())//
+        .build();
+  }
 
-  // @ExceptionHandler(value = RuntimeException.class)
-  // @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-  // public ApiResp<Void> runtimeExceptionHandler(RuntimeException e) {
-  //   return ApiResp.<Void>builder() //
-  //       .code(Code.INVALID_OPERATION.getCode()) //
-  //       .message(e.getMessage())//
-  //       // .data(null) //
-  //       .build();
-  // }
+  @ExceptionHandler(value = RuntimeException.class)
+  @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+  public ApiResp<Void> runtimeExceptionHandler(RuntimeException e) {
+    return ApiResp.<Void>builder() //
+        .code(Code.INVALID_OPERATION.getCode()) //
+        .message(e.getMessage())//
+        .build();
+  }
 
-  // @ExceptionHandler(value = Exception.class)
-  // @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-  // public ApiResp<Void> exceptionHandler(Exception e) {
-  //   return ApiResp.<Void>builder() //
-  //       .code(Code.INVALID_OPERATION.getCode()) //
-  //       .message(e.getMessage())//
-  //       // .data(null) //
-  //       .build();
-  // }
+  @ExceptionHandler(value = Exception.class)
+  @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+  public ApiResp<Void> exceptionHandler(Exception e) {
+    return ApiResp.<Void>builder() //
+        .code(Code.INVALID_OPERATION.getCode()) //
+        .message(e.getMessage())//
+        .build();
+  }
 
   private static Code getRespCode(Exception e) {
 

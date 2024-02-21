@@ -4,11 +4,16 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.vtxlab.project.bc_crypto_coingecko.controller.CoingeckoOperation;
 import com.vtxlab.project.bc_crypto_coingecko.exception.ApiResp;
 import com.vtxlab.project.bc_crypto_coingecko.exception.exceptionEnum.Code;
 import com.vtxlab.project.bc_crypto_coingecko.model.Coingecko;
+import com.vtxlab.project.bc_crypto_coingecko.model.CoingeckoDTO;
 import com.vtxlab.project.bc_crypto_coingecko.service.CoingeckoService;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RestController
 @RequestMapping("/crypto/coingecko/api/v1")
@@ -19,12 +24,18 @@ public class CoingeckoController implements CoingeckoOperation {
 
   @Override
   public ApiResp<List<Coingecko>> getAllData(String currency, String ids) {
-    List<Coingecko> data = coingeckoService.getDataFromApi(currency,ids);
+    List<Coingecko> data = coingeckoService.getDataFromApi(currency, ids);
     return ApiResp.<List<Coingecko>>builder()//
         .code(Code.OK.getCode())//
         .message(Code.OK.getMessage())//
         .data(data)//
         .build();//
   }
+
+  @GetMapping("/getFromRedis")
+  public List<CoingeckoDTO> getMethodName(@RequestParam String symbol) throws JsonProcessingException {
+    return coingeckoService.getDataFromRedis(symbol);
+  }
+
 
 }

@@ -29,8 +29,6 @@ public class FinnhubUriBuilderConfig {
   @Value("${api.finnhub.profile2.endpoint}")
   private String profileEndpoint;
 
-  @Value("${api.finnhub.symbol}")
-  private String symbolList;
 
   @Bean
   UriComponentsBuilder finnhubQuoteUriBuilder() {

@@ -22,7 +22,7 @@ public class ApiUtil {
     return UriComponentsBuilder.newInstance()//
         .scheme(uriScheme.getProtocol())//
         .host(domain)//
-        .pathSegment(path).scheme(",")//
+        .pathSegment(path)//
         .pathSegment(endpoint.split("/"));
   }
 
@@ -49,5 +49,13 @@ public class ApiUtil {
         .scheme(http.getProtocol())//
         .host(domain)//
         .pathSegment(endpoint.split("/"));
+  }
+
+  public static UriComponentsBuilder uriBuilder(UriScheme http, String domain,
+      String[] endpoints) {
+    return UriComponentsBuilder.newInstance()//
+        .scheme(http.getProtocol())//
+        .host(domain)//
+        .pathSegment(endpoints);
   }
 }
