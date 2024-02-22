@@ -21,7 +21,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
-import com.vtxlab.project.bc_crypto_coingecko.config.RedisUtils;
+import com.vtxlab.project.bc_crypto_coingecko.config.RedisHelper;
 import com.vtxlab.project.bc_crypto_coingecko.infra.Mapper;
 import com.vtxlab.project.bc_crypto_coingecko.infra.TraditionCurrency;
 import com.vtxlab.project.bc_crypto_coingecko.infra.UriScheme;
@@ -39,7 +39,7 @@ public class CoingeckoServiceTest {
   private RestTemplate restTemplate;
 
   @Mock
-  private RedisUtils redisUtils;
+  private RedisHelper redisUtils;
 
   @Mock
   private Mapper mapper;

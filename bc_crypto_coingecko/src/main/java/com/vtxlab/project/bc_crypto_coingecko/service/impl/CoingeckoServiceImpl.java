@@ -12,7 +12,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.vtxlab.project.bc_crypto_coingecko.config.RedisUtils;
+import com.vtxlab.project.bc_crypto_coingecko.config.RedisHelper;
 import com.vtxlab.project.bc_crypto_coingecko.infra.Mapper;
 import com.vtxlab.project.bc_crypto_coingecko.model.Coingecko;
 import com.vtxlab.project.bc_crypto_coingecko.model.CoingeckoDTO;
@@ -24,7 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 public class CoingeckoServiceImpl implements CoingeckoService {
 
   private final RestTemplate restTemplate;
-  private final RedisUtils redisUtils;
+  private final RedisHelper redisUtils;
   private final Mapper mapper;
   private final String currency;
   private final String coinIds;
@@ -32,7 +32,7 @@ public class CoingeckoServiceImpl implements CoingeckoService {
   private final ObjectMapper objectMapper = new ObjectMapper();
 
   @Autowired
-  public CoingeckoServiceImpl(RestTemplate restTemplate, RedisUtils redisUtils,
+  public CoingeckoServiceImpl(RestTemplate restTemplate, RedisHelper redisUtils,
       Mapper mapper,
       @Value("${redis-key.crypto.coingecko.coins-markets.currency}") String currency,
       @Value("${redis-key.crypto.coingecko.coins-markets.coin-ids}") String coinIds,

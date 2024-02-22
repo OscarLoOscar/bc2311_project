@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 public class ScheduledConfig {
 
   @Autowired
-  RedisUtils redisUtils;
+  RedisHelper redisUtils;
 
   // @Scheduled(fixedRate = 6000)
   public void scheduleFixedRateTask() {
