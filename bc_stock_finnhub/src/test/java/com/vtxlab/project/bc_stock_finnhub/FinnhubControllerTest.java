@@ -1,160 +1,88 @@
 package com.vtxlab.project.bc_stock_finnhub;
 
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import java.util.ArrayList;
-import java.util.List;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.mockito.Spy;
-import com.vtxlab.project.bc_stock_finnhub.controller.impl.FinnhubController;
-import com.vtxlab.project.bc_stock_finnhub.exception.ApiResp;
-import com.vtxlab.project.bc_stock_finnhub.exception.exceptionEnum.Syscode;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.web.servlet.MockMvc;
 import com.vtxlab.project.bc_stock_finnhub.model.CompanyProfile;
 import com.vtxlab.project.bc_stock_finnhub.model.Quote;
-import com.vtxlab.project.bc_stock_finnhub.model.StockDTO;
 import com.vtxlab.project.bc_stock_finnhub.service.FinnhubService;
 
+@SpringBootTest
+@AutoConfigureMockMvc
 class FinnhubControllerTest {
-  @Mock
-  private FinnhubService finnhubService;
+  @Autowired
+  private MockMvc mockMvc;
 
-  @Spy
-  private FinnhubController finnhubController = new FinnhubController();
+  @MockBean
+  private FinnhubService finnhubService;
 
   @BeforeEach
   public void setUp() {
     MockitoAnnotations.openMocks(this);
-    when(finnhubController.symbolIsValid("AAPL")).thenReturn(true);
-    when(finnhubController.symbolIsValid("GOOGL")).thenReturn(true);
-    when(finnhubController.symbolIsValid("MSFT")).thenReturn(true);
-    when(finnhubController.symbolIsValid("INVALID")).thenReturn(false);
-    // when(finnhubController.getSymbolList())
-    //     .thenReturn(List.of("AAPL,GOOGL,MSFT"));
-
-    when(finnhubController.getSymbolList()).thenReturn(List.of("AAPL"));
-
-  }
-
-
-  @Test
-  public void testGetQuote_InvalidSymbol_ReturnsInvalidInputApiResponse() {
-    //my original   @Value("${api.finnhub.symbol}")  is private String symbolList;
-
-    // Arrange
-    String symbol = "INVALID";
-    when(finnhubController.symbolIsValid(symbol)).thenReturn(false);
-
-    // Act
-    ApiResp<Quote> result = finnhubController.getQuote(symbol);
-
-    // Assert
-    assert result.getSyscode() == Syscode.INVALID_INPUT.getSyscode();
-    assert result.getMessage().equals(Syscode.INVALID_INPUT.getMessage());
-    assert result.getData() == null;
   }
 
   @Test
-  public void testGetProfile_ValidSymbol_ReturnsApiResponseWithProfile() {
-    // Arrange
-    String symbol = "AAPL";
-    CompanyProfile profile = CompanyProfile.builder().country("United States")//
+  void testGetQuote() throws Exception {
+    // Mock data
+    Quote quote = Quote.builder().c(100d).h(110d).l(90d).o(95d).pc(90d)
+        .t(1632825000L).build();
+    // Mock service response
+    when(finnhubService.getQuote("AAPL")).thenReturn(quote);
+    // Perform GET request and verify the response
+    mockMvc.perform(get("/stock/finnhub/api/v1/quote?symbol=AAPL"))//
+        .andExpect(status().isOk())//
+        .andExpect(jsonPath("$.syscode").value("000000"))//
+        .andExpect(jsonPath("$.message").value("OK"))//
+        .andExpect(jsonPath("$.data.c").value(100d))//
+        .andExpect(jsonPath("$.data.h").value(110d))//
+        .andExpect(jsonPath("$.data.l").value(90d))//
+        .andExpect(jsonPath("$.data.o").value(95d))//
+        .andExpect(jsonPath("$.data.pc").value(90d))//
+        .andExpect(jsonPath("$.data.t").value(1632825000L));
+  }
+
+  @Test
+  void testGetProfile() throws Exception {
+    // Mock data
+    CompanyProfile companyProfile = CompanyProfile.builder()//
+        .country("US")//
         .currency("USD")//
-        .estimateCurrency("USD")//
         .exchange("NASDAQ")//
-        .finnhubIndustry("Technology")//
-        .ipo("2021-01-01")//
-        .logo("https://example.com/logo.png")//
-        .marketCapitalization(1000000000L)//
-        .name("Example Inc.")//
-        .phone("+1 123-456-7890")//
-        .shareOutstanding(100000000L)//
-        .ticker("EXMP")//
-        .weburl("https://example.com")//
+        .ipo("1980-12-12")//
+        .marketCapitalization(200000000000L)//
+        .name("Apple Inc")//
+        .phone("14089961010")//
+        .shareOutstanding(10000000000L)//
+        .ticker("AAPL")//
+        .weburl("https://www.apple.com/")//
+        .logo("https://logo.com")//
         .build();
-    when(finnhubService.getProfile(symbol)).thenReturn(profile);
-
-    // Act
-    ApiResp<CompanyProfile> result = finnhubController.getProfile(symbol);
-
-    // Assert
-    verify(finnhubService).getProfile(symbol);
-    assert result.getSyscode() == Syscode.OK.getSyscode();
-    assert result.getMessage().equals(Syscode.OK.getMessage());
-    assert result.getData() == profile;
-  }
-
-  @Test
-  public void testGetProfile_InvalidSymbol_ReturnsInvalidInputApiResponse() {
-    // Arrange
-    String symbol = "INVALID";
-    when(finnhubController.symbolIsValid(symbol)).thenReturn(false);
-
-    // Act
-    ApiResp<CompanyProfile> result = finnhubController.getProfile(symbol);
-
-    // Assert
-    assert result.getSyscode() == Syscode.INVALID_INPUT.getSyscode();
-    assert result.getMessage().equals(Syscode.INVALID_INPUT.getMessage());
-    assert result.getData() == null;
-  }
-
-  @Test
-  public void testGetStock_ValidSymbol_ReturnsApiResponseWithStock() {
-    // Arrange
-    String symbol = "AAPL";
-    StockDTO stock = new StockDTO();
-    when(finnhubService.getStock(symbol)).thenReturn(stock);
-
-    // Act
-    ApiResp<StockDTO> result = finnhubController.getStock(symbol);
-
-    // Assert
-    verify(finnhubService).getStock(symbol);
-    assert result.getSyscode() == Syscode.OK.getSyscode();
-    assert result.getMessage().equals(Syscode.OK.getMessage());
-    assert result.getData() == stock;
-  }
-
-  @Test
-  public void testGetStock_InvalidSymbol_ReturnsInvalidInputApiResponse() {
-    // Arrange
-    String symbol = "INVALID";
-    when(finnhubController.symbolIsValid(symbol)).thenReturn(false);
-
-    // Act
-    ApiResp<StockDTO> result = finnhubController.getStock(symbol);
-
-    // Assert
-    assert result.getSyscode() == Syscode.INVALID_INPUT.getSyscode();
-    assert result.getMessage().equals(Syscode.INVALID_INPUT.getMessage());
-    assert result.getData() == null;
-  }
-
-  @Test
-  public void testSymbolIsValid_ValidSymbol_ReturnsTrue() {
-    // Arrange
-    String symbol = "AAPL";
-
-    // Act
-    boolean result = finnhubController.symbolIsValid(symbol);
-
-    // Assert
-    assert result == true;
-  }
-
-  @Test
-  public void testSymbolIsValid_InvalidSymbol_ReturnsFalse() {
-    // Arrange
-    String symbol = "INVALID";
-
-    // Act
-    boolean result = finnhubController.symbolIsValid(symbol);
-
-    // Assert
-    assert result == false;
+    // Mock service response
+    when(finnhubService.getProfile("AAPL")).thenReturn(companyProfile);
+    // Perform GET request and verify the response
+    mockMvc.perform(get("/stock/finnhub/api/v1/profile2?symbol=AAPL"))//
+        .andExpect(status().isOk())//
+        .andExpect(jsonPath("$.syscode").value("000000"))//
+        .andExpect(jsonPath("$.message").value("OK"))//
+        .andExpect(jsonPath("$.data.country").value("US"))//
+        .andExpect(jsonPath("$.data.currency").value("USD"))//
+        .andExpect(jsonPath("$.data.exchange").value("NASDAQ"))//
+        .andExpect(jsonPath("$.data.ipo").value("1980-12-12"))//
+        .andExpect(jsonPath("$.data.marketCapitalization").value(200000000000d))//
+        .andExpect(jsonPath("$.data.name").value("Apple Inc"))//
+        .andExpect(jsonPath("$.data.phone").value("14089961010"))//
+        .andExpect(jsonPath("$.data.shareOutstanding").value(10000000000d))//
+        .andExpect(jsonPath("$.data.ticker").value("AAPL"))//
+        .andExpect(jsonPath("$.data.weburl").value("https://www.apple.com/"))//
+        .andExpect(jsonPath("$.data.logo").value("https://logo.com"));
   }
 }

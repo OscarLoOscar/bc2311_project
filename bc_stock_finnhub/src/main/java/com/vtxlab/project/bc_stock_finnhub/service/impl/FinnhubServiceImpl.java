@@ -17,23 +17,19 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class FinnhubServiceImpl implements FinnhubService {
 
-  private static final int CACHE_EXPIRATION_TIME = 60;
-
   private final RestTemplate restTemplate;
   private final UriComponentsBuilder finnhubQuoteUriBuilder;
   private final UriComponentsBuilder finnhubCompanyProfileUriBuilder;
-  private final RedisHelper redisHelper;
   private final Mapper mapper;
 
   @Autowired
   public FinnhubServiceImpl(RestTemplate restTemplate,
       @Qualifier("finnhubQuoteUriBuilder") UriComponentsBuilder finnhubQuoteUriBuilder,
       @Qualifier("finnhubCompanyProfileUriBuilder") UriComponentsBuilder finnhubCompanyProfileUriBuilder,
-      RedisHelper redisHelper, Mapper mapper) {
+      Mapper mapper) {
     this.restTemplate = restTemplate;
     this.finnhubQuoteUriBuilder = finnhubQuoteUriBuilder;
     this.finnhubCompanyProfileUriBuilder = finnhubCompanyProfileUriBuilder;
-    this.redisHelper = redisHelper;
     this.mapper = mapper;
   }
 
