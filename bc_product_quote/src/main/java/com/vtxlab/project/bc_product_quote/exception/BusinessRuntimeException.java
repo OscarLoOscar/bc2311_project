@@ -1,15 +1,15 @@
 package com.vtxlab.project.bc_product_quote.exception;
 
-import com.vtxlab.project.bc_product_quote.exception.exceptionEnum.Code;
+import com.vtxlab.project.bc_product_quote.exception.exceptionEnum.Syscode;
 import lombok.Getter;
 
 @Getter
 public class BusinessRuntimeException extends RuntimeException {
-  private Code code;
+  private Syscode Syscode;
 
-  public BusinessRuntimeException(Code code) {
-    super(code.getMessage());
-    this.code = code;
+  public BusinessRuntimeException(Syscode Syscode) {
+    super(Syscode.getMessage());
+    this.Syscode = Syscode;
   }
 
 }

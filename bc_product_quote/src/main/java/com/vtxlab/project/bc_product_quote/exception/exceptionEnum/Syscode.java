@@ -1,9 +1,9 @@
-package com.vtxlab.project.bc_crypto_coingecko.exception.exceptionEnum;
+package com.vtxlab.project.bc_product_quote.exception.exceptionEnum;
 
 import lombok.Getter;
 
 @Getter
-public enum Code {
+public enum Syscode {
   OK("000000", "OK"), //
   INVALID_INPUT("9", "Invalid input"), //
   INVALID_OPERATION("10", "Invalid operation"), //
@@ -12,17 +12,17 @@ public enum Code {
   COINGECKO_SERVICE_UNAVAILABLE("900000", "Coingecko service is unavailable");
   //
 
-  private String code;
+  private String syscode;
   private String message;
 
-  private Code(String code, String message) {
-    this.code = code;
+  private Syscode(String syscode, String message) {
+    this.syscode = syscode;
     this.message = message;
   }
 
-  public static Code fromCode(String code) {
-    for (Code c : Code.values()) {
-      if (c.getCode().equals(code)) {
+  public static Syscode fromCode(Syscode syscode) {
+    for (Syscode c : Syscode.values()) {
+      if (c.getSyscode().equals(syscode.getSyscode())) {
         return c;
       }
     }

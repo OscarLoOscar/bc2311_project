@@ -1,102 +1,109 @@
 package com.vtxlab.project.bc_product_quote.exception;
 
+import java.util.Objects;
+import org.springframework.validation.BindingResult;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.Builder;
-import lombok.Data;
+import com.vtxlab.project.bc_product_quote.exception.exceptionEnum.Syscode;
 
-@Data
-@Builder
-@JsonInclude(JsonInclude.Include.NON_NULL) 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ApiResp<T> {
-  private int code;
+  private String syscode;
   private String message;
   private T data;
 
-  // public int getCode() {
-  //   return this.code;
-  // }
+  public String getSyscode() {
+    return this.syscode;
+  }
 
-  // public String getMessage() {
-  //   return this.message;
-  // }
+  public String getMessage() {
+    return this.message;
+  }
 
-  // public T getData() {
-  //   return this.data;
-  // }
+  public T getData() {
+    return this.data;
+  }
 
-  // public static <T> ApiResponseBuilder<T> builder() {
-  //   return new ApiResponseBuilder<>();
-  // }
+  public static <T> ApiResponseBuilder<T> builder() {
+    return new ApiResponseBuilder<>();
+  }
 
-  // private ApiResp(ApiResponseBuilder<T> builder) {
-  //   this.code = builder.code;
-  //   this.message = builder.message;
-  //   this.data = builder.data;
-  // }
+  private ApiResp(ApiResponseBuilder<T> builder) {
+    this.syscode = builder.syscode;
+    this.message = builder.message;
+    this.data = builder.data;
+  }
 
-  // public static class ApiResponseBuilder<T> {
-  //   private int code;
-  //   private String message;
-  //   private T data;
+  public static class ApiResponseBuilder<T> {
+    private String syscode;
+    private String message;
+    private T data;
 
-  //   public ApiResponseBuilder<T> status(Code code) {
-  //     this.code = code.getCode();
-  //     this.message = code.getMessage();
-  //     return this;
-  //   }
+    public ApiResponseBuilder<T> status(Syscode syscode) {
+      this.syscode = syscode.getSyscode();
+      this.message = syscode.getMessage();
+      return this;
+    }
 
-  //   public ApiResponseBuilder<T> concatMessageIfPresent(String str) {
-  //     if (this.message != null && str != null)
-  //       this.message += " " + str;
-  //     return this;
-  //   }
+    public ApiResponseBuilder<T> concatMessageIfPresent(String str) {
+      if (this.message != null && str != null)
+        this.message += " " + str;
+      return this;
+    }
 
-  //   public ApiResponseBuilder<T> ok() {
-  //     this.code = Code.OK.getCode();
-  //     this.message = Code.OK.getMessage();
-  //     return this;
-  //   }
+    public ApiResponseBuilder<T> ok() {
+      this.syscode = Syscode.OK.getSyscode();
+      this.message = Syscode.OK.getMessage();
+      return this;
+    }
 
-  //   public ApiResponseBuilder<T> error() {
-  //     this.code = Code.INVALID_INPUT.getCode();
-  //     this.message = Code.INVALID_INPUT.getMessage();
-  //     return this;
-  //   }
+    public ApiResponseBuilder<T> error() {
+      this.syscode = Syscode.INVALID_INPUT.getSyscode();
+      this.message = Syscode.INVALID_INPUT.getMessage();
+      return this;
+    }
 
-  //   public ApiResponseBuilder<T> error(Code code) {
-  //     this.code = code.getCode();
-  //     return this;
-  //   }
+    public ApiResponseBuilder<T> error(Syscode syscode) {
+      this.syscode = syscode.getSyscode();
+      return this;
+    }
 
-  //   public ApiResponseBuilder<T> error(Code code, BindingResult bindingResult) {
-  //     this.code = code.getCode();
-  //     this.message =
-  //         Objects.requireNonNull(bindingResult.getFieldError()).getField() + " "
-  //             + bindingResult.getFieldError().getCode();
-  //     return this;
-  //   }
+    public ApiResponseBuilder<T> error(Syscode syscode, BindingResult bindingResult) {
+      this.syscode = syscode.getSyscode();
+      this.message =
+          bindingResult.getFieldError() != null
+              ? Objects.requireNonNull(bindingResult.getFieldError()).getField()
+                  + " " + bindingResult.getFieldError().getCode()
+              : null;
+      return this;
+    }
 
-  //   public ApiResponseBuilder<T> data(T data) {
-  //     this.data = data;
-  //     return this;
-  //   }
+    public ApiResponseBuilder<T> syscode(String syscode) {
+      this.syscode = syscode;
+      return this;
+    }
 
-  //   public ApiResponseBuilder<T> message(String message) {
-  //     this.message = message;
-  //     return this;
-  //   }
+    public ApiResponseBuilder<T> data(T data) {
+      this.data = data;
+      return this;
+    }
 
-  //   public ApiResp<T> build() {
-  //     if (this.code == 0 || this.message == null)
-  //       throw new RuntimeException();
-  //     return new ApiResp<>(this);
-  //   }
+    public ApiResponseBuilder<T> message(String message) {
+      this.message = message;
+      return this;
+    }
 
-  // }
+    public ApiResp<T> build() {
+      if (this.syscode.isEmpty() || this.message == null)
+        throw new RuntimeException();
+      return new ApiResp<>(this);
+    }
+
+
+  }
 }
 
 // {
-// "code" : 200,
+// "Syscode" : 200,
 // "message" : "OK",
 // "data" : [
 

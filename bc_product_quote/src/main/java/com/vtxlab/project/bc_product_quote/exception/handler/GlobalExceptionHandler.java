@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.client.RestClientException;
 import com.vtxlab.project.bc_product_quote.exception.ApiResp;
 import com.vtxlab.project.bc_product_quote.exception.BusinessException;
-import com.vtxlab.project.bc_product_quote.exception.exceptionEnum.Code;
+import com.vtxlab.project.bc_product_quote.exception.exceptionEnum.Syscode;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -16,7 +16,7 @@ public class GlobalExceptionHandler {
   @ResponseStatus(value = HttpStatus.SERVICE_UNAVAILABLE) // 503
   public ApiResp<Void> bc2311ExceptionHandler(RestClientException e) {
     return ApiResp.<Void>builder() //
-        .code(Code.COINGECKO_SERVICE_UNAVAILABLE.getCode()) //
+        .syscode(Syscode.COINGECKO_SERVICE_UNAVAILABLE.getSyscode()) //
         .message(e.getMessage())//
         .build();
   }
@@ -26,7 +26,7 @@ public class GlobalExceptionHandler {
   @ResponseStatus(value = HttpStatus.BAD_REQUEST)
   public ApiResp<Void> bc2311ExceptionHandler(BusinessException e) {
     return ApiResp.<Void>builder() //
-        .code(e.getCode().getCode()) //
+        .syscode(e.getSyscode().getSyscode()) //
         .message(e.getMessage())//
         .build();
   }
@@ -35,7 +35,7 @@ public class GlobalExceptionHandler {
   @ResponseStatus(value = HttpStatus.BAD_REQUEST)
   public ApiResp<Void> runtimeExceptionHandler(RuntimeException e) {
     return ApiResp.<Void>builder() //
-        .code(Code.INVALID_OPERATION.getCode()) //
+        .syscode(Syscode.INVALID_OPERATION.getSyscode()) //
         .message(e.getMessage())//
         .build();
   }
@@ -44,18 +44,18 @@ public class GlobalExceptionHandler {
   @ResponseStatus(value = HttpStatus.BAD_REQUEST)
   public ApiResp<Void> exceptionHandler(Exception e) {
     return ApiResp.<Void>builder() //
-        .code(Code.INVALID_OPERATION.getCode()) //
+        .syscode(Syscode.INVALID_OPERATION.getSyscode()) //
         .message(e.getMessage())//
         .build();
   }
 
-  private static Code getRespCode(Exception e) {
+  private static Syscode getRespCode(Exception e) {
 
     if (e instanceof IllegalArgumentException) {
-      return Code.INVALID_INPUT;
+      return Syscode.INVALID_INPUT;
     }
     // ...
     // return null;
-    return Code.INVALID_OPERATION;
+    return Syscode.INVALID_OPERATION;
   }
 }

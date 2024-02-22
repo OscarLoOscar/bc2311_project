@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CompanyProfile {
-  private Integer code;
+  private Integer Syscode;
   private String message;
   private Data data;
 

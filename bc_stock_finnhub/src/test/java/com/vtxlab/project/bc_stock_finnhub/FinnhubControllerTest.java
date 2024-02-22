@@ -12,7 +12,7 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 import com.vtxlab.project.bc_stock_finnhub.controller.impl.FinnhubController;
 import com.vtxlab.project.bc_stock_finnhub.exception.ApiResp;
-import com.vtxlab.project.bc_stock_finnhub.exception.exceptionEnum.Code;
+import com.vtxlab.project.bc_stock_finnhub.exception.exceptionEnum.Syscode;
 import com.vtxlab.project.bc_stock_finnhub.model.CompanyProfile;
 import com.vtxlab.project.bc_stock_finnhub.model.Quote;
 import com.vtxlab.project.bc_stock_finnhub.model.StockDTO;
@@ -52,8 +52,8 @@ class FinnhubControllerTest {
     ApiResp<Quote> result = finnhubController.getQuote(symbol);
 
     // Assert
-    assert result.getCode() == Code.INVALID_INPUT.getCode();
-    assert result.getMessage().equals(Code.INVALID_INPUT.getMessage());
+    assert result.getSyscode() == Syscode.INVALID_INPUT.getSyscode();
+    assert result.getMessage().equals(Syscode.INVALID_INPUT.getMessage());
     assert result.getData() == null;
   }
 
@@ -82,8 +82,8 @@ class FinnhubControllerTest {
 
     // Assert
     verify(finnhubService).getProfile(symbol);
-    assert result.getCode() == Code.OK.getCode();
-    assert result.getMessage().equals(Code.OK.getMessage());
+    assert result.getSyscode() == Syscode.OK.getSyscode();
+    assert result.getMessage().equals(Syscode.OK.getMessage());
     assert result.getData() == profile;
   }
 
@@ -97,8 +97,8 @@ class FinnhubControllerTest {
     ApiResp<CompanyProfile> result = finnhubController.getProfile(symbol);
 
     // Assert
-    assert result.getCode() == Code.INVALID_INPUT.getCode();
-    assert result.getMessage().equals(Code.INVALID_INPUT.getMessage());
+    assert result.getSyscode() == Syscode.INVALID_INPUT.getSyscode();
+    assert result.getMessage().equals(Syscode.INVALID_INPUT.getMessage());
     assert result.getData() == null;
   }
 
@@ -114,8 +114,8 @@ class FinnhubControllerTest {
 
     // Assert
     verify(finnhubService).getStock(symbol);
-    assert result.getCode() == Code.OK.getCode();
-    assert result.getMessage().equals(Code.OK.getMessage());
+    assert result.getSyscode() == Syscode.OK.getSyscode();
+    assert result.getMessage().equals(Syscode.OK.getMessage());
     assert result.getData() == stock;
   }
 
@@ -129,8 +129,8 @@ class FinnhubControllerTest {
     ApiResp<StockDTO> result = finnhubController.getStock(symbol);
 
     // Assert
-    assert result.getCode() == Code.INVALID_INPUT.getCode();
-    assert result.getMessage().equals(Code.INVALID_INPUT.getMessage());
+    assert result.getSyscode() == Syscode.INVALID_INPUT.getSyscode();
+    assert result.getMessage().equals(Syscode.INVALID_INPUT.getMessage());
     assert result.getData() == null;
   }
 

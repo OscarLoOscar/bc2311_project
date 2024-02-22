@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Coingecko {
-  private Integer code;
+  private Integer Syscode;
   private String message;
   private List<Data> data;
 

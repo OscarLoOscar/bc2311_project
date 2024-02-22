@@ -4,17 +4,17 @@ import java.util.List;
 import java.util.Objects;
 import org.springframework.validation.BindingResult;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.vtxlab.project.bc_crypto_coingecko.exception.exceptionEnum.Code;
+import com.vtxlab.project.bc_crypto_coingecko.exception.exceptionEnum.Syscode;
 import com.vtxlab.project.bc_crypto_coingecko.model.Coingecko;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ApiResp<T> {
-  private String code;
+  private String syscode;
   private String message;
   private T data;
 
-  public String getCode() {
-    return this.code;
+  public String getSyscode() {
+    return this.syscode;
   }
 
   public String getMessage() {
@@ -30,19 +30,19 @@ public class ApiResp<T> {
   }
 
   private ApiResp(ApiResponseBuilder<T> builder) {
-    this.code = builder.code;
+    this.syscode = builder.syscode;
     this.message = builder.message;
     this.data = builder.data;
   }
 
   public static class ApiResponseBuilder<T> {
-    private String code;
+    private String syscode;
     private String message;
     private T data;
 
-    public ApiResponseBuilder<T> status(Code code) {
-      this.code = code.getCode();
-      this.message = code.getMessage();
+    public ApiResponseBuilder<T> status(Syscode syscode) {
+      this.syscode = syscode.getSyscode();
+      this.message = syscode.getMessage();
       return this;
     }
 
@@ -53,24 +53,24 @@ public class ApiResp<T> {
     }
 
     public ApiResponseBuilder<T> ok() {
-      this.code = Code.OK.getCode();
-      this.message = Code.OK.getMessage();
+      this.syscode = Syscode.OK.getSyscode();
+      this.message = Syscode.OK.getMessage();
       return this;
     }
 
     public ApiResponseBuilder<T> error() {
-      this.code = Code.INVALID_INPUT.getCode();
-      this.message = Code.INVALID_INPUT.getMessage();
+      this.syscode = Syscode.INVALID_INPUT.getSyscode();
+      this.message = Syscode.INVALID_INPUT.getMessage();
       return this;
     }
 
-    public ApiResponseBuilder<T> error(Code code) {
-      this.code = code.getCode();
+    public ApiResponseBuilder<T> error(Syscode syscode) {
+      this.syscode = syscode.getSyscode();
       return this;
     }
 
-    public ApiResponseBuilder<T> error(Code code, BindingResult bindingResult) {
-      this.code = code.getCode();
+    public ApiResponseBuilder<T> error(Syscode syscode, BindingResult bindingResult) {
+      this.syscode = syscode.getSyscode();
       this.message =
           bindingResult.getFieldError() != null
               ? Objects.requireNonNull(bindingResult.getFieldError()).getField()
@@ -79,8 +79,8 @@ public class ApiResp<T> {
       return this;
     }
 
-    public ApiResponseBuilder<T> code(String code) {
-      this.code = code;
+    public ApiResponseBuilder<T> Syscode(String syscode) {
+      this.syscode = syscode;
       return this;
     }
 
@@ -95,7 +95,7 @@ public class ApiResp<T> {
     }
 
     public ApiResp<T> build() {
-      if (this.code.isEmpty() || this.message == null)
+      if (this.syscode.isEmpty() || this.message == null)
         throw new RuntimeException();
       return new ApiResp<>(this);
     }
@@ -105,7 +105,7 @@ public class ApiResp<T> {
 }
 
 // {
-// "code" : 200,
+// "Syscode" : 200,
 // "message" : "OK",
 // "data" : [
 

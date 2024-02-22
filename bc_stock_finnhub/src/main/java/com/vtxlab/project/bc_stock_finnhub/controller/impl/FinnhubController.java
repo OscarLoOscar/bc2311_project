@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.vtxlab.project.bc_stock_finnhub.controller.FinnhubOperation;
 import com.vtxlab.project.bc_stock_finnhub.exception.ApiResp;
-import com.vtxlab.project.bc_stock_finnhub.exception.exceptionEnum.Code;
+import com.vtxlab.project.bc_stock_finnhub.exception.exceptionEnum.Syscode;
 import com.vtxlab.project.bc_stock_finnhub.model.CompanyProfile;
 import com.vtxlab.project.bc_stock_finnhub.model.Quote;
 import com.vtxlab.project.bc_stock_finnhub.model.StockDTO;
@@ -31,14 +31,14 @@ public class FinnhubController implements FinnhubOperation {
     if (symbolIsValid(symbol)) {
       Quote data = finnhubService.getQuote(symbol);
       return ApiResp.<Quote>builder() //
-          .code(Code.OK.getCode()) //
-          .message(Code.OK.getMessage())//
+          .syscode(Syscode.OK.getSyscode()) //
+          .message(Syscode.OK.getMessage())//
           .data(data) //
           .build();
     }
     return ApiResp.<Quote>builder() //
-        .code(Code.INVALID_INPUT.getCode()) //
-        .message(Code.INVALID_INPUT.getMessage())//
+        .syscode(Syscode.INVALID_INPUT.getSyscode()) //
+        .message(Syscode.INVALID_INPUT.getMessage())//
         .build();
   }
 
@@ -47,14 +47,14 @@ public class FinnhubController implements FinnhubOperation {
     if (symbolIsValid(symbol)) {
       CompanyProfile data = finnhubService.getProfile(symbol);
       return ApiResp.<CompanyProfile>builder() //
-          .code(Code.OK.getCode()) //
-          .message(Code.OK.getMessage())//
+          .syscode(Syscode.OK.getSyscode()) //
+          .message(Syscode.OK.getMessage())//
           .data(data) //
           .build();
     }
     return ApiResp.<CompanyProfile>builder() //
-        .code(Code.INVALID_INPUT.getCode()) //
-        .message(Code.INVALID_INPUT.getMessage())//
+        .syscode(Syscode.INVALID_INPUT.getSyscode()) //
+        .message(Syscode.INVALID_INPUT.getMessage())//
         .build();
   }
 
@@ -63,14 +63,14 @@ public class FinnhubController implements FinnhubOperation {
     if (symbolIsValid(symbol)) {
       StockDTO data = finnhubService.getStock(symbol);
       return ApiResp.<StockDTO>builder() //
-          .code(Code.OK.getCode()) //
-          .message(Code.OK.getMessage())//
+          .syscode(Syscode.OK.getSyscode()) //
+          .message(Syscode.OK.getMessage())//
           .data(data) //
           .build();
     }
     return ApiResp.<StockDTO>builder() //
-        .code(Code.INVALID_INPUT.getCode()) //
-        .message(Code.INVALID_INPUT.getMessage())//
+        .syscode(Syscode.INVALID_INPUT.getSyscode()) //
+        .message(Syscode.INVALID_INPUT.getMessage())//
         .build();
   }
 

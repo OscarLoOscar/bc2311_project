@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.vtxlab.project.bc_crypto_coingecko.controller.CoingeckoOperation;
 import com.vtxlab.project.bc_crypto_coingecko.exception.ApiResp;
-import com.vtxlab.project.bc_crypto_coingecko.exception.exceptionEnum.Code;
+import com.vtxlab.project.bc_crypto_coingecko.exception.exceptionEnum.Syscode;
 import com.vtxlab.project.bc_crypto_coingecko.model.Coingecko;
 import com.vtxlab.project.bc_crypto_coingecko.service.CoingeckoService;
 
@@ -22,8 +22,8 @@ public class CoingeckoController implements CoingeckoOperation {
   public ApiResp<List<Coingecko>> getAllData(String currency, String ids) {
     List<Coingecko> data = coingeckoService.getDataFromApi(currency, ids);
     return ApiResp.<List<Coingecko>>builder()//
-        .code(Code.OK.getCode())//
-        .message(Code.OK.getMessage())//
+        .Syscode(Syscode.OK.getSyscode())//
+        .message(Syscode.OK.getMessage())//
         .data(data)//
         .build();//
   }

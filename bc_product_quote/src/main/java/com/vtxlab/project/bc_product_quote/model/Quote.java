@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Quote {
-  private Integer code;
+  private Integer Syscode;
   private String message;
   private Data data;
 
