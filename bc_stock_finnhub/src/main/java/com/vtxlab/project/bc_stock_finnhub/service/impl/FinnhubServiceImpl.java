@@ -45,7 +45,7 @@ public class FinnhubServiceImpl implements FinnhubService {
     return companyProfile;
   }
 
-  private Quote getQuoteFromApi(String symbol) {
+  public Quote getQuoteFromApi(String symbol) {
     UriComponentsBuilder builder = UriComponentsBuilder
         .fromUriString(finnhubQuoteUriBuilder.toUriString());
     builder.replaceQueryParam("symbol", symbol);
@@ -53,7 +53,7 @@ public class FinnhubServiceImpl implements FinnhubService {
     return restTemplate.getForObject(builder.toUriString(), Quote.class);
   }
 
-  private CompanyProfile getProfileFromApi(String symbol) {
+  public CompanyProfile getProfileFromApi(String symbol) {
     UriComponentsBuilder builder = UriComponentsBuilder
         .fromUriString(finnhubCompanyProfileUriBuilder.toUriString());
     builder.replaceQueryParam("symbol", symbol);
