@@ -13,11 +13,13 @@ public class ScheduledConfig {
   @Autowired
   RedisHelper redisUtils;
 
-  // @Scheduled(fixedRate = 6000)
-  public void scheduleFixedRateTask() {
+  @Autowired
+  AppRunner appRunner;
+
+  @Scheduled(fixedRate = 60000)
+  public void scheduleFixedRateTask() throws Exception {
     // make System.currentTimeMillis() to seconds
-    System.out
-        .println("Fixed rate task - " + System.currentTimeMillis() / 1000);
+    appRunner.run();
   }
 
 

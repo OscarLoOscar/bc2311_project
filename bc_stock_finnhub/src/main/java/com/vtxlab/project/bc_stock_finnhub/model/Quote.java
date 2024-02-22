@@ -11,20 +11,20 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Quote {
-  @JsonProperty("Current_Price")
-  private Long c;
-  @JsonProperty("Change")
-  private Long d;
-  @JsonProperty("Percent_Change")
-  private Long dp;
-  @JsonProperty("High_Price_Of_The_Day")
-  private Long h;
-  @JsonProperty("Low_Price_Of_The_Day")
-  private Long l;
-  @JsonProperty("Open_Price_Of_The_Day")
-  private Long o;
-  @JsonProperty("Previous_Close_Price")
-  private Long pc;
-  @JsonProperty("Timestamp")
-  private Integer t;
+  // @JsonProperty("Current_Price")
+  private Double c;
+  // @JsonProperty("Change")
+  private Double d;
+  // @JsonProperty("Percent_Change")
+  private Double dp;
+  // @JsonProperty("High_Price_Of_The_Day")
+  private Double h;
+  // @JsonProperty("Low_Price_Of_The_Day")
+  private Double l;
+  // @JsonProperty("Open_Price_Of_The_Day")
+  private Double o;
+  // @JsonProperty("Previous_Close_Price")
+  private Double pc;
+  // @JsonProperty("Timestamp")
+  private Long t;
 }

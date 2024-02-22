@@ -9,6 +9,7 @@ import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSeriali
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.web.client.RestTemplate;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.vtxlab.project.bc_stock_finnhub.infra.RedisHelper;
 
 @Configuration
 public class AppConfig {
@@ -22,7 +23,7 @@ public class AppConfig {
   ModelMapper modelMapper() {
     return new ModelMapper();
   }
-  
+
 
   @Bean
   RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory factory,
@@ -36,4 +37,9 @@ public class AppConfig {
     return redisTemplate;
   }
 
+  @Bean
+  RedisHelper redisProfileHelper(RedisConnectionFactory factory, //
+      ObjectMapper redisObjectMapper) {
+    return new RedisHelper(factory, redisObjectMapper);
+  }
 }

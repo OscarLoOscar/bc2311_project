@@ -1,21 +1,112 @@
-package com.vtxlab.project.bc_stock_finnhub.config;
+package com.vtxlab.project.bc_stock_finnhub.infra;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.stereotype.Component;
+import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
+import org.springframework.data.redis.serializer.RedisSerializer;
+import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.util.CollectionUtils;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.swagger.v3.oas.annotations.Operation;
+import lombok.extern.slf4j.Slf4j;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
 
-@Component
-public class RedisUtils {
+@Slf4j
+public class RedisHelper {
   // 直接用RedisTemplate操作Redis，需要很多行代码，因此直接封装好一个RedisUtil，这样写代码更方便点。这个RedisUtil交给Spring容器实例化，使用时直接注解注入。
   @Autowired
   private RedisTemplate<String, Object> redisTemplate;
+
+  @Autowired
+  private ObjectMapper objectMapper = new ObjectMapper();
   // =============================common============================
+
+  // This factory is used to create a connection to the Redis server.
+  public RedisHelper(RedisTemplate<String, Object> redisTemplate) {
+    this.redisTemplate = redisTemplate;
+  }
+
+  public RedisHelper(RedisConnectionFactory factory) {
+    // ObjectMapper objectMapper = new ObjectMapper() //
+    // .registerModule(new ParameterNamesModule())
+    // .registerModule(new Jdk8Module()) //
+    // .registerModule(new JavaTimeModule());
+    // this.redisTemplate = template(factory, objectMapper);
+    RedisTemplate template = new RedisTemplate();
+    template.setConnectionFactory(factory);// 配置连接工厂
+
+    // 使用Jackson2JsonRedisSerializer来序列化和反序列化redis的value值（默认使用JDK的序列化方式）
+    Jackson2JsonRedisSerializer jackson2JsonRedisSerializer =
+        new Jackson2JsonRedisSerializer(Object.class);
+
+    ObjectMapper objectMapper = new ObjectMapper();// 自定义ObjectMapper
+    // 指定要序列化的域，field,get和set,以及修饰符范围，ANY是都有包括private和public
+    objectMapper.setVisibility(PropertyAccessor.ALL,
+        JsonAutoDetect.Visibility.ANY);
+    // 指定序列化输入的类型，类必须是非final修饰的，final修饰的类，比如String,Integer等会抛出异常
+    objectMapper.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
+    jackson2JsonRedisSerializer.setObjectMapper(objectMapper);
+    // String序列化配置
+    StringRedisSerializer stringRedisSerializer = new StringRedisSerializer();
+    // key采用String的序列化方式
+    template.setKeySerializer(stringRedisSerializer);
+    // hash的key也采用String的序列化方式
+    template.setHashKeySerializer(stringRedisSerializer);
+    // value序列化方式采用jackson
+    template.setValueSerializer(jackson2JsonRedisSerializer);
+    // hash的value序列化方式采用jackson
+    template.setHashValueSerializer(jackson2JsonRedisSerializer);
+    template.afterPropertiesSet();
+  }
+
+  // takes a RedisConnectionFactory and an ObjectMapper as arguments.
+  // The ObjectMapper is used to serialize and deserialize objects to and from JSON.
+  public RedisHelper(RedisConnectionFactory factory,
+      ObjectMapper redisObjectMapper) {
+    this.redisTemplate = template(factory, redisObjectMapper);
+  }
+
+  @Operation(
+      summary = "The RedisConnectionFactory is used to create a connection to the Redis server."//
+          + "The ObjectMapper is used to serialize and deserialize objects to and from JSON."//
+          + "create a RedisTemplate object that is customized for your specific needs.")
+  public static RedisTemplate<String, Object> template(
+      RedisConnectionFactory factory, ObjectMapper redisObjectMapper) { // method name -> bean name
+    RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
+    redisTemplate.setConnectionFactory(factory);
+    redisTemplate.setKeySerializer(RedisSerializer.string());
+    redisTemplate.setValueSerializer(RedisSerializer.json());
+    // redisTemplate.setHashKeySerializer(RedisSerializer.string());
+    // redisTemplate.setHashValueSerializer(RedisSerializer.json());
+    redisTemplate.afterPropertiesSet();
+    Jackson2JsonRedisSerializer<Object> serializer =
+        new Jackson2JsonRedisSerializer<>(redisObjectMapper, Object.class);
+    redisTemplate.setValueSerializer(serializer);
+    return redisTemplate;
+  }
+
+  public static RedisTemplate<String, Object> template(
+      RedisConnectionFactory factory) {
+    RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
+    redisTemplate.setConnectionFactory(factory);
+    redisTemplate.setKeySerializer(RedisSerializer.string());
+    redisTemplate
+        .setValueSerializer(new Jackson2JsonRedisSerializer<>(Object.class));
+    redisTemplate.afterPropertiesSet();
+    return redisTemplate;
+  }
 
   /**
    * 指定缓存失效时间
@@ -90,6 +181,17 @@ public class RedisUtils {
   }
 
   /**
+   * 普通缓存获取
+   *
+   * @param key 键
+   * @return 值
+   */
+  public <T> T get(String key, Class<T> clazz) throws JsonProcessingException {
+    String value = (String) this.redisTemplate.opsForValue().get(key);
+    return objectMapper.readValue(value, clazz);
+  }
+
+  /**
    * 普通缓存放入
    *
    * @param key 键
@@ -98,7 +200,8 @@ public class RedisUtils {
    */
   public boolean set(String key, Object value) {
     try {
-      redisTemplate.opsForValue().set(key, value);
+      String json = objectMapper.writeValueAsString(value);
+      redisTemplate.opsForValue().set(key, json);
       return true;
     } catch (Exception e) {
       e.printStackTrace();
@@ -165,8 +268,18 @@ public class RedisUtils {
    * @param item 项 不能为null
    * @return 值
    */
-  public Object hget(String key, String item) {
-    return redisTemplate.opsForHash().get(key, item);
+  public <T> T hget(String key, String item, Class<T> clazz) {
+    try {
+      Object value = redisTemplate.opsForHash().get(key, item);
+      if (value != null) {
+        String jsonValue = objectMapper.writeValueAsString(value);
+        return objectMapper.readValue(jsonValue, clazz);
+      }
+    } catch (Exception e) {
+      log.error("Error getting value from Redis for key: {} and item: {}", key,
+          item, e);
+    }
+    return null;
   }
 
   /**
@@ -175,8 +288,21 @@ public class RedisUtils {
    * @param key
    * @return
    */
-  public Map<Object, Object> hgetall(String key) {
-    return redisTemplate.opsForHash().entries(key);
+  public <T> Map<String, T> hgetall(String key, Class<T> clazz) {
+    try {
+      Map<Object, Object> hashEntries = redisTemplate.opsForHash().entries(key);
+      Map<String, T> resultMap = new LinkedHashMap<>();
+      for (Map.Entry<Object, Object> entry : hashEntries.entrySet()) {
+        String hashKey = (String) entry.getKey();
+        String jsonValue = objectMapper.writeValueAsString(entry.getValue());
+        T value = objectMapper.readValue(jsonValue, clazz);
+        resultMap.put(hashKey, value);
+      }
+      return resultMap;
+    } catch (Exception e) {
+      log.error("Error getting all values from Redis for key: {}", key, e);
+    }
+    return Collections.emptyMap();
   }
 
   /**
@@ -185,8 +311,21 @@ public class RedisUtils {
    * @param key 键
    * @return 对应的多个键值
    */
-  public Map<Object, Object> hmget(String key) {
-    return redisTemplate.opsForHash().entries(key);
+  public <T> Map<String, T> hmget(String key, Class<T> clazz) {
+    try {
+      Map<Object, Object> hashEntries = redisTemplate.opsForHash().entries(key);
+      Map<String, T> resultMap = new LinkedHashMap<>();
+      for (Map.Entry<Object, Object> entry : hashEntries.entrySet()) {
+        String hashKey = (String) entry.getKey();
+        String jsonValue = objectMapper.writeValueAsString(entry.getValue());
+        T value = objectMapper.readValue(jsonValue, clazz);
+        resultMap.put(hashKey, value);
+      }
+      return resultMap;
+    } catch (Exception e) {
+      log.error("Error getting multiple values from Redis for key: {}", key, e);
+    }
+    return Collections.emptyMap();
   }
 
   /**
@@ -320,13 +459,20 @@ public class RedisUtils {
    * @param key 键
    * @return
    */
-  public Set<Object> sGet(String key) {
+  public <T> Set<T> sGet(String key, Class<T> clazz) {
     try {
-      return redisTemplate.opsForSet().members(key);
+      Set<Object> members = redisTemplate.opsForSet().members(key);
+      Set<T> resultSet = new HashSet<>();
+      for (Object member : members) {
+        String jsonValue = objectMapper.writeValueAsString(member);
+        T value = objectMapper.readValue(jsonValue, clazz);
+        resultSet.add(value);
+      }
+      return resultSet;
     } catch (Exception e) {
-      e.printStackTrace();
-      return null;
+      log.error("Error getting set values from Redis for key: {}", key, e);
     }
+    return Collections.emptySet();
   }
 
   /**
@@ -391,7 +537,7 @@ public class RedisUtils {
     try {
       return redisTemplate.opsForSet().size(key);
     } catch (Exception e) {
-      e.printStackTrace();
+      log.error("Error getting size of set in Redis for key: {}", key, e);
       return 0;
     }
   }
@@ -422,13 +568,20 @@ public class RedisUtils {
    * @param end 结束 0 到 -1代表所有值
    * @return
    */
-  public List<Object> lGet(String key, long start, long end) {
+  public <T> List<T> lGet(String key, long start, long end, Class<T> clazz) {
     try {
-      return redisTemplate.opsForList().range(key, start, end);
+      List<Object> range = redisTemplate.opsForList().range(key, start, end);
+      List<T> resultList = new ArrayList<>();
+      for (Object obj : range) {
+        String jsonValue = objectMapper.writeValueAsString(obj);
+        T value = objectMapper.readValue(jsonValue, clazz);
+        resultList.add(value);
+      }
+      return resultList;
     } catch (Exception e) {
-      e.printStackTrace();
-      return null;
+      log.error("Error getting list values from Redis for key: {}", key, e);
     }
+    return Collections.emptyList();
   }
 
   /**
@@ -441,7 +594,7 @@ public class RedisUtils {
     try {
       return redisTemplate.opsForList().size(key);
     } catch (Exception e) {
-      e.printStackTrace();
+      log.error("Error getting size of list in Redis for key: {}", key, e);
       return 0;
     }
   }
@@ -453,13 +606,19 @@ public class RedisUtils {
    * @param index 索引 index>=0时， 0 表头，1 第二个元素，依次类推；index<0时，-1，表尾，-2倒数第二个元素，依次类推
    * @return
    */
-  public Object lGetIndex(String key, long index) {
+  public <T> T lGetIndex(String key, long index, Class<T> clazz) {
     try {
-      return redisTemplate.opsForList().index(key, index);
+      Object value = redisTemplate.opsForList().index(key, index);
+      if (value != null) {
+        String jsonValue = objectMapper.writeValueAsString(value);
+        return objectMapper.readValue(jsonValue, clazz);
+      }
     } catch (Exception e) {
-      e.printStackTrace();
-      return null;
+      log.error(
+          "Error getting value from list in Redis for key: {} and index: {}",
+          key, index, e);
     }
+    return null;
   }
 
   /**

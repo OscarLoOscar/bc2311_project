@@ -5,14 +5,12 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
-
-import com.vtxlab.project.bc_stock_finnhub.config.RedisUtils;
 import com.vtxlab.project.bc_stock_finnhub.infra.Mapper;
+import com.vtxlab.project.bc_stock_finnhub.infra.RedisHelper;
 import com.vtxlab.project.bc_stock_finnhub.model.CompanyProfile;
 import com.vtxlab.project.bc_stock_finnhub.model.Quote;
 import com.vtxlab.project.bc_stock_finnhub.model.StockDTO;
 import com.vtxlab.project.bc_stock_finnhub.service.FinnhubService;
-
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -24,34 +22,30 @@ public class FinnhubServiceImpl implements FinnhubService {
   private final RestTemplate restTemplate;
   private final UriComponentsBuilder finnhubQuoteUriBuilder;
   private final UriComponentsBuilder finnhubCompanyProfileUriBuilder;
-  private final RedisUtils redisUtils;
+  private final RedisHelper redisHelper;
   private final Mapper mapper;
 
   @Autowired
   public FinnhubServiceImpl(RestTemplate restTemplate,
       @Qualifier("finnhubQuoteUriBuilder") UriComponentsBuilder finnhubQuoteUriBuilder,
       @Qualifier("finnhubCompanyProfileUriBuilder") UriComponentsBuilder finnhubCompanyProfileUriBuilder,
-      RedisUtils redisUtils, Mapper mapper) {
+      RedisHelper redisHelper, Mapper mapper) {
     this.restTemplate = restTemplate;
     this.finnhubQuoteUriBuilder = finnhubQuoteUriBuilder;
     this.finnhubCompanyProfileUriBuilder = finnhubCompanyProfileUriBuilder;
-    this.redisUtils = redisUtils;
+    this.redisHelper = redisHelper;
     this.mapper = mapper;
   }
 
   @Override
   public Quote getQuote(String symbol) {
-    String key = "stock:finnhub:quote:";
     Quote quote = getQuoteFromApi(symbol);
-    redisUtils.set(key + symbol, quote, CACHE_EXPIRATION_TIME);
     return quote;
   }
 
   @Override
   public CompanyProfile getProfile(String symbol) {
-    String key = "stock:finnhub:profile:";
     CompanyProfile companyProfile = getProfileFromApi(symbol);
-    redisUtils.set(key + symbol, companyProfile, CACHE_EXPIRATION_TIME);
     return companyProfile;
   }
 

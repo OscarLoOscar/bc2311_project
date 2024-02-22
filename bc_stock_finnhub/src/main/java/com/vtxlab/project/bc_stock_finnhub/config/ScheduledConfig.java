@@ -5,19 +5,22 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import com.vtxlab.project.bc_stock_finnhub.infra.RedisHelper;
 
 @Component
 @EnableScheduling
 public class ScheduledConfig {
 
   @Autowired
-  RedisUtils redisUtils;
+  RedisHelper redisHelper;
 
-  // @Scheduled(fixedRate = 6000)
-  public void scheduleFixedRateTask() {
+  @Autowired
+  AppRunner appRunner;
+
+  @Scheduled(fixedRate = 60000)
+  public void scheduleFixedRateTask() throws Exception {
     // make System.currentTimeMillis() to seconds
-    System.out
-        .println("Fixed rate task - " + System.currentTimeMillis() / 1000);
+    appRunner.run();
   }
 
 
