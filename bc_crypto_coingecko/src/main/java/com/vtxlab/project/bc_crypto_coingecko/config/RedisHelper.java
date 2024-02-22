@@ -200,7 +200,8 @@ public class RedisHelper {
    */
   public boolean set(String key, Object value) {
     try {
-      redisTemplate.opsForValue().set(key, value);
+      String json = objectMapper.writeValueAsString(value);
+      redisTemplate.opsForValue().set(key, json);
       return true;
     } catch (Exception e) {
       e.printStackTrace();
