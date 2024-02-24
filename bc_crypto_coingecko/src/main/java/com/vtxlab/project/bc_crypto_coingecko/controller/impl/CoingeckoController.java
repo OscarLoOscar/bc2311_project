@@ -28,6 +28,12 @@ public class CoingeckoController implements CoingeckoOperation {
         .build();//
   }
 
-
-
+  @Override
+  public ApiResp<List<String>> getCoinList() {
+    return ApiResp.<List<String>>builder()//
+        .Syscode(Syscode.OK.getSyscode())//
+        .message(Syscode.OK.getMessage())//
+        .data(coingeckoService.getCoinList())//
+        .build();//
+  }
 }

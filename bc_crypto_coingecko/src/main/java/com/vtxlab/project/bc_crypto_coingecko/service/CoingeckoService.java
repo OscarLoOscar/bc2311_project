@@ -8,4 +8,5 @@ public interface CoingeckoService {
 
   List<Coingecko> getDataFromApi(String currency, String ids);
 
+  List<String> getCoinList();
 }

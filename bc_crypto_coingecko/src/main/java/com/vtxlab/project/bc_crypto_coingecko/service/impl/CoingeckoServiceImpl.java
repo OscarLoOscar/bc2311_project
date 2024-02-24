@@ -78,4 +78,11 @@ public class CoingeckoServiceImpl implements CoingeckoService {
         .getForObject(coingeckoUriBuilder.toUriString(), Coingecko[].class));
   }
 
+  @Override
+  public List<String> getCoinList() {
+    return this.getCoinMarket().stream()//
+        .map(Coingecko::getSymbol)//
+        .collect(Collectors.toList());
+  }
+
 }
