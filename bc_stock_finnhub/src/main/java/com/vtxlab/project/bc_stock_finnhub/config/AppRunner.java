@@ -31,28 +31,14 @@ public class AppRunner implements CommandLineRunner {
 
   @Autowired
   RedisHelper redisHelper;
-
-  @Autowired
-  Mapper mapper;
-
-  @Value("${redis-key.symbol}")
-  String stockSymbol;
-
-  private static final int CACHE_EXPIRATION_TIME = 60;
-  private static final String quoteKey = "stock:finnhub:quote:";
-  private static final String profileKey = "stock:finnhub:profile:";
+  private static final String symbolKey = "stock:finnhub:symbol:";
 
   @Override
   public void run(String... args) throws Exception {
-    Arrays.stream(stockSymbol.split(","))//
-        .forEach(e -> {
-          Quote targetQuote = finnhubService.getQuote(e);
-          redisHelper.set(quoteKey + e, targetQuote, CACHE_EXPIRATION_TIME);
-
-          CompanyProfile companyProfile = finnhubService.getProfile(e);
-          redisHelper.set(profileKey + e, companyProfile,
-              CACHE_EXPIRATION_TIME);
-        });
+    List<String> validStockSymbolList = finnhubService.getStockList();
+    // log.info("validStockSymbolList: {}", validStockSymbolList);
+    redisHelper.lSet(symbolKey, validStockSymbolList);
+    log.info("after lSet to Redis");
   }
 }
 

@@ -10,7 +10,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public class StockSymbol {
 
-  @Value("${api.finnhub.symbol}")
+  @Value("${api.finnhub.stockSymbol}")
   private String stockSymbol;
 
   public List<String> getStockIds() {

@@ -23,7 +23,7 @@ public class FinnhubController implements FinnhubOperation {
   @Autowired
   private FinnhubService finnhubService;
 
-  @Value("${api.finnhub.symbol}")
+  @Value("${api.finnhub.stockSymbol}")
   private String symbolList;
 
   @Override
@@ -71,6 +71,15 @@ public class FinnhubController implements FinnhubOperation {
     return ApiResp.<StockDTO>builder() //
         .syscode(Syscode.INVALID_INPUT.getSyscode()) //
         .message(Syscode.INVALID_INPUT.getMessage())//
+        .build();
+  }
+
+  @Override
+  public ApiResp<List<String>> getStockList() {
+    return ApiResp.<List<String>>builder() //
+        .syscode(Syscode.OK.getSyscode()) //
+        .message(Syscode.OK.getMessage())//
+        .data(this.getSymbolList()) //
         .build();
   }
 

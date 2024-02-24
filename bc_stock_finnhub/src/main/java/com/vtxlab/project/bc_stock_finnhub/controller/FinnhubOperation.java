@@ -1,5 +1,6 @@
 package com.vtxlab.project.bc_stock_finnhub.controller;
 
+import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -22,4 +23,8 @@ public interface FinnhubOperation {
   @GetMapping("/getStock")
   @ResponseStatus(HttpStatus.OK)
   ApiResp<StockDTO> getStock(@RequestParam String symbol);
+
+  @GetMapping("/getStockList")
+  @ResponseStatus(HttpStatus.OK)
+  ApiResp<List<String>> getStockList();
 }

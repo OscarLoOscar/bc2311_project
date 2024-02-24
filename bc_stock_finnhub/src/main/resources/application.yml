@@ -12,7 +12,10 @@ api:
       # https://finnhub.io/api/v1/stock/profile2?symbol=AAPL&token=cju3it9r01qr958213c0cju3it9r01qr958213cg
     profile2:
       endpoint: stock/profile2
-    symbol: AAPL,MSFT,NVDA
+    symbol:
+      endpoint: stock/symbol
+      exchange: US
+    stockSymbol: AAPL,MSFT,NVDA
 
 
 redis-key:

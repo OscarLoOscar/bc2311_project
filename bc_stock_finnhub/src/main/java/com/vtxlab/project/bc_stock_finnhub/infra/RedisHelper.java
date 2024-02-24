@@ -628,14 +628,18 @@ public class RedisHelper {
    * @param value 值
    * @return
    */
-  public boolean lSet(String key, Object value) {
-    try {
-      redisTemplate.opsForList().rightPush(key, value);
-      return true;
-    } catch (Exception e) {
-      e.printStackTrace();
-      return false;
-    }
+  // public boolean lSet(String key, Object value) {
+  // try {
+  // redisTemplate.opsForList().rightPush(key, value);
+  // return true;
+  // } catch (Exception e) {
+  // e.printStackTrace();
+  // return false;
+  // }
+  // }
+
+  public Long lSet(String key, String value) {
+    return redisTemplate.opsForList().leftPush(key, value);
   }
 
   /**
@@ -660,12 +664,14 @@ public class RedisHelper {
 
   /**
    * 将list放入缓存
+   * 
+   * @param <T>
    *
    * @param key 键
    * @param value 值
    * @return
    */
-  public boolean lSet(String key, List<Object> value) {
+  public <T> boolean lSet(String key, List<T> value) {
     try {
       redisTemplate.opsForList().rightPushAll(key, value);
       return true;
@@ -683,11 +689,11 @@ public class RedisHelper {
    * @param time 时间(秒)
    * @return
    */
-  public boolean lSet(String key, List<Object> value, long time) {
+  public <T> boolean lSet(String key, List<T> value, long time) {
     try {
       redisTemplate.opsForList().rightPushAll(key, value);
       if (time > 0)
-        expire(key, time);
+        redisTemplate.expire(key, time, TimeUnit.SECONDS);
       return true;
     } catch (Exception e) {
       e.printStackTrace();

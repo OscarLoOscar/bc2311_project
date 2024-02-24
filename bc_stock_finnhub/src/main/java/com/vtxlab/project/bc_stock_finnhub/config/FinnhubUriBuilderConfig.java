@@ -29,6 +29,11 @@ public class FinnhubUriBuilderConfig {
   @Value("${api.finnhub.profile2.endpoint}")
   private String profileEndpoint;
 
+  @Value("${api.finnhub.symbol.endpoint}")
+  private String symbolEndpoint;
+
+  @Value("${api.finnhub.symbol.exchange}")
+  private String exchange;
 
   @Bean
   UriComponentsBuilder finnhubQuoteUriBuilder() {
@@ -38,6 +43,11 @@ public class FinnhubUriBuilderConfig {
   @Bean
   UriComponentsBuilder finnhubCompanyProfileUriBuilder() {
     return createUriBuilder(profileEndpoint);
+  }
+
+  @Bean
+  UriComponentsBuilder finnhubSymbolUriBuilder() {
+    return createUriBuilder(symbolEndpoint).queryParam("exchange", exchange);
   }
 
   private UriComponentsBuilder createUriBuilder(String endpoint) {
