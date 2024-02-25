@@ -11,8 +11,8 @@ import jakarta.validation.Payload;
 @Documented
 @Target({ElementType.FIELD, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = coinSymbolValidator.class) // how to validate
-public @interface coinSymbolCheck {
+@Constraint(validatedBy = CoinSymbolValidator.class) // how to validate
+public @interface CoinSymbolCheck {
   
   public String message() default "Invalid Symbol. Please use a valid symbol to try again.";
   

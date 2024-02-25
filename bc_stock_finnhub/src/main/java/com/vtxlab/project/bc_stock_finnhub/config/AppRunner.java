@@ -1,23 +1,16 @@
 package com.vtxlab.project.bc_stock_finnhub.config;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
-import com.vtxlab.project.bc_stock_finnhub.infra.Mapper;
 import com.vtxlab.project.bc_stock_finnhub.infra.RedisHelper;
-import com.vtxlab.project.bc_stock_finnhub.model.CompanyProfile;
-import com.vtxlab.project.bc_stock_finnhub.model.Quote;
 import com.vtxlab.project.bc_stock_finnhub.service.FinnhubService;
-import com.vtxlab.project.bc_stock_finnhub.service.impl.FinnhubServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@Component
+// @Component
 @Profile("!test") // 表示这个配置或者方法只在非测试环境下生效。也就是说，当你的Spring环境不是"test"时，这个配置或者方法才会被加载和执行。
 public class AppRunner implements CommandLineRunner {
 
@@ -26,19 +19,20 @@ public class AppRunner implements CommandLineRunner {
   // 1.Check on configuration - DB or yml
   // 2.Invoke API to get data(i.e. configuration , raw data)
 
-  @Autowired
-  FinnhubService finnhubService;
+  // @Autowired
+  // FinnhubService finnhubService;
 
-  @Autowired
-  RedisHelper redisHelper;
-  private static final String symbolKey = "stock:finnhub:symbol:";
+  // @Autowired
+  // RedisHelper redisHelper;
+  // private static final String symbolKey = "stock:finnhub:symbol:";
 
   @Override
   public void run(String... args) throws Exception {
-    List<String> validStockSymbolList = finnhubService.getStockList();
+    // List<String> validStockSymbolList = finnhubService.getStockList();
+    // log.info("validStockSymbolList size: {}", validStockSymbolList.size());
     // log.info("validStockSymbolList: {}", validStockSymbolList);
-    redisHelper.lSet(symbolKey, validStockSymbolList);
-    log.info("after lSet to Redis");
+    // redisHelper.lSet(symbolKey, validStockSymbolList);
+    // log.info("after lSet to Redis");
   }
 }
 

@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -571,17 +572,32 @@ public class RedisHelper {
   public <T> List<T> lGet(String key, long start, long end, Class<T> clazz) {
     try {
       List<Object> range = redisTemplate.opsForList().range(key, start, end);
-      List<T> resultList = new ArrayList<>();
-      for (Object obj : range) {
-        String jsonValue = objectMapper.writeValueAsString(obj);
-        T value = objectMapper.readValue(jsonValue, clazz);
-        resultList.add(value);
-      }
-      return resultList;
+      return range.stream()//
+          .map(obj -> deserializeObject(obj, clazz))//
+          .collect(Collectors.toList());
     } catch (Exception e) {
       log.error("Error getting list values from Redis for key: {}", key, e);
     }
     return Collections.emptyList();
+  }
+
+  /**
+   * Deserialize an object into the specified class.
+   * 
+   * @param obj The object to deserialize.
+   * @param clazz The class of the object.
+   * @param <T> The type of the object.
+   * @return The deserialized object.
+   */
+  private <T> T deserializeObject(Object obj, Class<T> clazz) {
+    if (obj == null) {
+      return null;
+    }
+    if (clazz.isAssignableFrom(obj.getClass())) {
+      return clazz.cast(obj);
+    } else {
+      throw new IllegalArgumentException("Object is not of the expected class");
+    }
   }
 
   /**
@@ -628,15 +644,15 @@ public class RedisHelper {
    * @param value 值
    * @return
    */
-  // public boolean lSet(String key, Object value) {
-  // try {
-  // redisTemplate.opsForList().rightPush(key, value);
-  // return true;
-  // } catch (Exception e) {
-  // e.printStackTrace();
-  // return false;
-  // }
-  // }
+  public boolean lSet(String key, Object value) {
+    try {
+      redisTemplate.opsForList().rightPush(key, value);
+      return true;
+    } catch (Exception e) {
+      e.printStackTrace();
+      return false;
+    }
+  }
 
   public Long lSet(String key, String value) {
     return redisTemplate.opsForList().leftPush(key, value);

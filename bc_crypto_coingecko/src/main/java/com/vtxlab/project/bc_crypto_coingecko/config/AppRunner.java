@@ -9,7 +9,7 @@ import com.vtxlab.project.bc_crypto_coingecko.service.CoingeckoService;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@Component
+// @Component
 @Profile("!test") // 表示这个配置或者方法只在非测试环境下生效。也就是说，当你的Spring环境不是"test"时，这个配置或者方法才会被加载和执行。
 public class AppRunner implements CommandLineRunner {
 
@@ -18,15 +18,10 @@ public class AppRunner implements CommandLineRunner {
   // 1.Check on configuration - DB or yml
   // 2.Invoke API to get data(i.e. configuration , raw data)
 
-  @Autowired
-  CoingeckoService coingeckoService;
-
 
 
   @Override
   public void run(String... args) throws Exception {
-    List<String> validCoinList = coingeckoService.getCoinList();
-    log.info("validCoinList: {}", validCoinList);
 
   }
 }

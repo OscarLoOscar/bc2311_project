@@ -24,7 +24,7 @@ public interface FinnhubOperation {
   @ResponseStatus(HttpStatus.OK)
   ApiResp<StockDTO> getStock(@RequestParam String symbol);
 
-  @GetMapping("/getStockList")
+  @GetMapping("/stockList")
   @ResponseStatus(HttpStatus.OK)
   ApiResp<List<String>> getStockList();
 }

@@ -80,9 +80,7 @@ public class CoingeckoServiceImpl implements CoingeckoService {
 
   @Override
   public List<String> getCoinList() {
-    return this.getCoinMarket().stream()//
-        .map(Coingecko::getSymbol)//
+    return this.getCoinMarket().stream().map(Coingecko::getId)//
         .collect(Collectors.toList());
   }
-
 }

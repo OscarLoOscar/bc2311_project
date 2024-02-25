@@ -5,10 +5,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
-import com.vtxlab.project.bc_product_data.infra.Mapper;
 import com.vtxlab.project.bc_product_data.model.CompanyProfile;
 import com.vtxlab.project.bc_product_data.model.Quote;
-import com.vtxlab.project.bc_product_data.model.StockDTO;
+import com.vtxlab.project.bc_product_data.model.response.QuoteResponseDTO;
 import com.vtxlab.project.bc_product_data.service.StockService;
 import lombok.extern.slf4j.Slf4j;
 
@@ -20,14 +19,6 @@ public class StockServiceImpl implements StockService {
   private RestTemplate restTemplate;
 
   @Autowired
-  @Qualifier("coingeckoUriString")
-  private UriComponentsBuilder coingeckoUriString;
-
-  @Autowired
-  @Qualifier("finnhubStockUriString")
-  private UriComponentsBuilder finnhubStockUriString;
-
-  @Autowired
   @Qualifier("finnhubQuoteUriString")
   private UriComponentsBuilder finnhubQuoteUriString;
 
@@ -35,26 +26,29 @@ public class StockServiceImpl implements StockService {
   @Qualifier("finnhubProfileUriString")
   private UriComponentsBuilder finnhubProfileUriString;
 
-  public StockDTO getStock(String symbol) {
-    log.info("Service stock: " + finnhubStockUriString
-        .replaceQueryParam("symbol", symbol).build(false).toUriString());
-    return restTemplate.getForObject(finnhubStockUriString
-        .replaceQueryParam("symbol", symbol).build(false).toUriString(),
-        StockDTO.class);
-  }
 
   @Override
-  public Quote getQuote(String symbol) {
-    log.info("Service stock: " + finnhubQuoteUriString
+  public QuoteResponseDTO getQuote(String symbol) {
+    log.info("Service getQuote: " + finnhubQuoteUriString
         .replaceQueryParam("symbol", symbol).build(false).toUriString());
-    return restTemplate.getForObject(finnhubQuoteUriString
+    Quote data = restTemplate.getForObject(finnhubQuoteUriString
         .replaceQueryParam("symbol", symbol).build(false).toUriString(),
         Quote.class);
+    return QuoteResponseDTO.builder()//
+        .c(data.getData().getC())//
+        .d(data.getData().getD())//
+        .dp(data.getData().getDp())//
+        .h(data.getData().getH())//
+        .l(data.getData().getL())//
+        .o(data.getData().getO())//
+        .pc(data.getData().getPc())//
+        .t(data.getData().getT())//
+        .build();
   }
 
   @Override
   public CompanyProfile getProfile(String symbol) {
-    log.info("Service stock: " + finnhubProfileUriString
+    log.info("Service getProfile: " + finnhubProfileUriString
         .replaceQueryParam("symbol", symbol).build(false).toUriString());
     return restTemplate.getForObject(finnhubProfileUriString
         .replaceQueryParam("symbol", symbol).build(false).toUriString(),

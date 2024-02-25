@@ -18,7 +18,7 @@ public class UriBuilderConfig {
   @Value("${api.bc_crypto_coingecko.endpoints.currency}")
   private String coingeckoCurrency;
 
-  @Value("${api.bc_crypto_coingecko.endpoints.ids}")
+  @Value("${api.bc_crypto_coingecko.endpoints.coinList}")
   private String coingeckoIds;
 
   @Value("${api.bc_stock_finnhub.domain}")
@@ -30,15 +30,13 @@ public class UriBuilderConfig {
   @Value("${api.bc_stock_finnhub.endpoint.profile}")
   private String profileEndpoint;
 
-  @Value("${api.bc_stock_finnhub.endpoint.stock}")
+  @Value("${api.bc_stock_finnhub.endpoint.stockList}")
   private String stockEndpoint;
 
-  @Value("${api.bc_stock_finnhub.symbols}")
-  private String symbolList;
 
   @Bean
   public UriComponentsBuilder coingeckoUriString() {
-    return createUriBuilder(coingeckoDomain, coingeckoCurrency, coingeckoIds);
+    return createUriBuilder(coingeckoDomain, coingeckoIds);
   }
 
   @Bean
@@ -60,7 +58,7 @@ public class UriBuilderConfig {
       String... endpoints) {
     UriComponentsBuilder builder =
         ApiUtil.uriBuilder(UriScheme.HTTP, domain, endpoints);
-    log.info("UriBuilder: " + builder.toUriString());
+    log.info("UriBuilder: " + builder.build(false).toUriString());
     return builder;
   }
 }

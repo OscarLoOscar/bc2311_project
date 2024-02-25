@@ -1,16 +1,18 @@
+server:
+  port: 8084
+
 api:
   bc_crypto_coingecko:
     domain: localhost:8082/crypto/coingecko/api/v1
     endpoints:
       currency: usd
-      ids: bitcoin,ethereum
+      coinList: coinList
   bc_stock_finnhub:
-    domain: localhost:8083/stock/finnhub/api/v1/
+    domain: localhost:8083/stock/finnhub/api/v1
     endpoint:
       quote: quote
       profile: profile2
-      stock: getStock
-    symbols: AAPL,MSFT,NVDA
+      stockList: stockList
 
 spring:
   datasource:
@@ -20,7 +22,7 @@ spring:
     driver-class-name: "org.postgresql.Driver"
 spring.jpa:
   show-sql: true
-  hibernate.ddl-auto: update # create-drop
+  hibernate.ddl-auto: create-drop # update
   properties:
     hibernate:
       dialect: org.hibernate.dialect.PostgreSQLDialect

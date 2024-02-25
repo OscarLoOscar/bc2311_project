@@ -11,8 +11,8 @@ import jakarta.validation.Payload;
 @Documented
 @Target({ElementType.FIELD, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = stockSymbolValidator.class) // how to validate
-public @interface stockSymbolCheck {
+@Constraint(validatedBy = StockSymbolValidator.class) // how to validate
+public @interface StockSymbolCheck {
   
   public String message() default "Invalid Symbol. Please use a valid symbol to try again.";
   

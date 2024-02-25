@@ -30,10 +30,12 @@ public class CoingeckoController implements CoingeckoOperation {
 
   @Override
   public ApiResp<List<String>> getCoinList() {
+    List<String> data = coingeckoService.getCoinList();
     return ApiResp.<List<String>>builder()//
         .Syscode(Syscode.OK.getSyscode())//
         .message(Syscode.OK.getMessage())//
-        .data(coingeckoService.getCoinList())//
+        .data(data)//
         .build();//
   }
+
 }

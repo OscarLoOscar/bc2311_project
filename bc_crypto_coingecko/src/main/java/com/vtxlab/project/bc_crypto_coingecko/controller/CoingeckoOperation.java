@@ -12,9 +12,10 @@ public interface CoingeckoOperation {
 
   @GetMapping("")
   @ResponseStatus(HttpStatus.OK)
-  public ApiResp<List<Coingecko>> getAllData(@RequestParam String currency, @RequestParam String ids);
+  public ApiResp<List<Coingecko>> getAllData(@RequestParam String currency,
+      @RequestParam String ids);
 
-  @GetMapping("/coin-list")
+  @GetMapping("/coinList")
   @ResponseStatus(HttpStatus.OK)
   public ApiResp<List<String>> getCoinList();
 }

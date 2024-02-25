@@ -1,19 +1,21 @@
 package com.vtxlab.project.bc_product_data.annotation.coin;
 
-import java.util.Arrays;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Value;
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import com.vtxlab.project.bc_product_data.service.ValidListService;
 import lombok.Getter;
 
 @Getter
-@AllArgsConstructor
 public class CoinSymbol {
-  @Value("${api.bc_crypto_coingecko.ids}")
-  private String coinSymbol;
+  private final ValidListService validListService;
+
+  @Autowired
+  public CoinSymbol(ValidListService validListService) {
+    this.validListService = validListService;
+  }
 
   public List<String> getCoinIds() {
-    return Arrays.asList(coinSymbol.split(","));
+    return validListService.getCoinList().getCoinList();
   }
 
 }

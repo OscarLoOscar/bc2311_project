@@ -1,13 +1,10 @@
 package com.vtxlab.project.bc_product_data.service;
 
 import com.vtxlab.project.bc_product_data.model.CompanyProfile;
-import com.vtxlab.project.bc_product_data.model.Quote;
-import com.vtxlab.project.bc_product_data.model.StockDTO;
+import com.vtxlab.project.bc_product_data.model.response.QuoteResponseDTO;
 
 public interface StockService {
-  StockDTO getStock(String symbol);
-
-  Quote getQuote(String symbol);
+  QuoteResponseDTO getQuote(String symbol);
 
   CompanyProfile getProfile(String symbol);
 

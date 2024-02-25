@@ -74,15 +74,6 @@ public class FinnhubController implements FinnhubOperation {
         .build();
   }
 
-  @Override
-  public ApiResp<List<String>> getStockList() {
-    return ApiResp.<List<String>>builder() //
-        .syscode(Syscode.OK.getSyscode()) //
-        .message(Syscode.OK.getMessage())//
-        .data(this.getSymbolList()) //
-        .build();
-  }
-
   public boolean symbolIsValid(String symbol) {
     List<String> symbols = this.getSymbolList();
     log.info("SIZE : " + symbols.size());
@@ -92,5 +83,15 @@ public class FinnhubController implements FinnhubOperation {
 
   public List<String> getSymbolList() {
     return Arrays.asList(symbolList.split(","));
+  }
+
+  @Override
+  public ApiResp<List<String>> getStockList() {
+    List<String> data = finnhubService.getStockList();
+    return ApiResp.<List<String>>builder() //
+        .syscode(Syscode.OK.getSyscode()) //
+        .message(Syscode.OK.getMessage())//
+        .data(data) //
+        .build();
   }
 }

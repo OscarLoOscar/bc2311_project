@@ -4,15 +4,11 @@ import java.util.Objects;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
-public class stockSymbolValidator
-    implements ConstraintValidator<stockSymbolCheck, StockSymbol> {
+public class StockSymbolValidator
+    implements ConstraintValidator<StockSymbolCheck, String> {
 
   @Override
-  public boolean isValid(StockSymbol value, ConstraintValidatorContext context) {
-    try {
-      return Objects.nonNull(value) && value.getStockIds().contains(value);
-    } catch (Exception e) {
-      return false;
-    }
+  public boolean isValid(String value, ConstraintValidatorContext context) {
+    return Objects.nonNull(value);
   }
 }

@@ -77,9 +77,16 @@ public class FinnhubServiceImpl implements FinnhubService {
 
   @Override
   public List<String> getStockList() {
-
-    List<Symbol> symbols = Arrays.asList(restTemplate
-        .getForObject(finnhubSymbolUriBuilder.toUriString(), Symbol[].class));
-    return symbols.stream().limit(50).map(e -> e.getSymbol()).collect(Collectors.toList());
+    UriComponentsBuilder builder = UriComponentsBuilder
+        .fromUriString(finnhubSymbolUriBuilder.toUriString());
+    log.info("getStockList Service :" + builder.toUriString());
+    Symbol[] symbols =
+        restTemplate.getForObject(builder.toUriString(), Symbol[].class);
+    return Arrays.asList(symbols).stream()//
+        .filter(e -> e.getType().equals("Common Stock")
+            && e.getMic().equals("XNAS"))//
+        .map(Symbol::getSymbol)//
+        .collect(Collectors.toList());
   }
+
 }
