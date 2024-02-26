@@ -93,7 +93,7 @@ public class ApiResp<T> {
     }
 
     public ApiResp<T> build() {
-      if (this.syscode.isEmpty() || this.message == null)
+      if (this.syscode.isEmpty() || this.message.isEmpty())
         throw new RuntimeException();
       return new ApiResp<>(this);
     }

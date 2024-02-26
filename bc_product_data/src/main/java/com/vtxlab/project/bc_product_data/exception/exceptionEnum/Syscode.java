@@ -7,6 +7,7 @@ public enum Syscode {
   OK("000000", "OK"), //
   INVALID_INPUT("9", "Invalid input"), //
   INVALID_OPERATION("10", "Invalid operation"), //
+  INVALID_COIN_SYMBOL("11", "Invalid coin symbol"), //
   // Api error
   API_ERROR("100", "API error"), //
   COINGECKO_SERVICE_UNAVAILABLE("900000", "Coingecko service is unavailable");
