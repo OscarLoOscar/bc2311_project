@@ -10,6 +10,7 @@ import com.vtxlab.project.bc_product_data.entity.FinnhubProfileEntity;
 import com.vtxlab.project.bc_product_data.entity.FinnhubQuoteEntity;
 import com.vtxlab.project.bc_product_data.model.CoingeckoDTO;
 import com.vtxlab.project.bc_product_data.model.CompanyProfile;
+import com.vtxlab.project.bc_product_data.model.StockDTO;
 import com.vtxlab.project.bc_product_data.model.response.CompanyProfileResponseDTO;
 import com.vtxlab.project.bc_product_data.model.response.QuoteResponseDTO;
 
@@ -81,6 +82,21 @@ public class Mapper {
         .shareOutstanding(data.getShareOutstanding())//
         .ticker(data.getTicker())//
         .weburl(data.getWeburl())//
+        .build();
+  }
+
+  public StockDTO map(CompanyProfileResponseDTO profile,
+      QuoteResponseDTO quote) {
+    return StockDTO.builder()//
+        .name(profile.getName())//
+        .ticker(profile.getTicker())//
+        .currentPrice(quote.getC())//
+        .change(quote.getH())//
+        .percentChange(quote.getDp())//
+        .highPriceOfTheDay(quote.getH())//
+        .lowPriceOfTheDay(quote.getL())//
+        .openPriceOfTheDay(quote.getO())//
+        .previousClosePrice(quote.getPc())//
         .build();
   }
 }

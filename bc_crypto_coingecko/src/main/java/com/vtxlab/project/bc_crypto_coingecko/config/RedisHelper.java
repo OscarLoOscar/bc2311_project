@@ -22,6 +22,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Slf4j
 public class RedisHelper {
@@ -568,20 +570,43 @@ public class RedisHelper {
    * @param end 结束 0 到 -1代表所有值
    * @return
    */
+  // public <T> List<T> lGet(String key, long start, long end, Class<T> clazz) {
+  // try {
+  // List<Object> range = redisTemplate.opsForList().range(key, start, end);
+  // List<T> resultList = new ArrayList<>();
+  // for (Object obj : range) {
+  // String jsonValue = objectMapper.writeValueAsString(obj);
+  // T value = objectMapper.readValue(jsonValue, clazz);
+  // resultList.add(value);
+  // }
+  // return resultList;
+  // } catch (Exception e) {
+  // log.error("Error getting list values from Redis for key: {}", key, e);
+  // }
+  // return Collections.emptyList();
+  // }
+
+
   public <T> List<T> lGet(String key, long start, long end, Class<T> clazz) {
     try {
-      List<Object> range = redisTemplate.opsForList().range(key, start, end);
+      String jsonValue = (String) redisTemplate.opsForValue().get(key);
+      if (jsonValue == null) {
+        return Collections.emptyList();
+      }
       List<T> resultList = new ArrayList<>();
-      for (Object obj : range) {
-        String jsonValue = objectMapper.writeValueAsString(obj);
-        T value = objectMapper.readValue(jsonValue, clazz);
+      ObjectMapper objectMapper = new ObjectMapper();
+      List<Object> range = objectMapper.readValue(jsonValue,
+          new TypeReference<List<Object>>() {});
+      for (Object obj : range.subList((int) start, (int) end + 1)) {
+        String jsonObj = objectMapper.writeValueAsString(obj);
+        T value = objectMapper.readValue(jsonObj, clazz);
         resultList.add(value);
       }
       return resultList;
     } catch (Exception e) {
       log.error("Error getting list values from Redis for key: {}", key, e);
+      return Collections.emptyList();
     }
-    return Collections.emptyList();
   }
 
   /**
@@ -640,23 +665,28 @@ public class RedisHelper {
 
   /**
    * 将list放入缓存
+   * 
+   * @param <T>
    *
    * @param key 键
    * @param value 值
    * @param time 时间(秒)
    * @return
    */
-  public boolean lSet(String key, Object value, long time) {
+  public <T> boolean lSet(String key, List<T> value, long time) {
     try {
-      redisTemplate.opsForList().rightPush(key, value);
+      String jsonValue = objectMapper.writeValueAsString(value);
+      redisTemplate.opsForValue().set(key, jsonValue);
       if (time > 0)
-        expire(key, time);
+        redisTemplate.expire(key, time, TimeUnit.SECONDS);
       return true;
     } catch (Exception e) {
       e.printStackTrace();
       return false;
     }
   }
+
+
 
   /**
    * 将list放入缓存
@@ -683,17 +713,17 @@ public class RedisHelper {
    * @param time 时间(秒)
    * @return
    */
-  public boolean lSet(String key, List<Object> value, long time) {
-    try {
-      redisTemplate.opsForList().rightPushAll(key, value);
-      if (time > 0)
-        expire(key, time);
-      return true;
-    } catch (Exception e) {
-      e.printStackTrace();
-      return false;
-    }
-  }
+  // public boolean lSet(String key, List<Object> value, long time) {
+  // try {
+  // redisTemplate.opsForList().rightPushAll(key, value);
+  // if (time > 0)
+  // expire(key, time);
+  // return true;
+  // } catch (Exception e) {
+  // e.printStackTrace();
+  // return false;
+  // }
+  // }
 
   /**
    * 根据索引修改list中的某条数据

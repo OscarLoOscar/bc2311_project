@@ -12,30 +12,21 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class StockDTO {
-  private Integer Syscode;
-  private String message;
-  private Data data;
 
-  @NoArgsConstructor
-  @AllArgsConstructor
-  @Getter
-  @Builder
-  public static class Data {
     private String name;
     private String ticker;
     @JsonProperty("Current_Price")
-    private int currentPrice;
+    private double currentPrice;
     @JsonProperty("Change")
-    private int change;
+    private double change;
     @JsonProperty("Percent_Change")
-    private int percentChange;
+    private double percentChange;
     @JsonProperty("High_Price_Of_The_Day")
-    private int highPriceOfTheDay;
+    private double highPriceOfTheDay;
     @JsonProperty("Low_Price_Of_The_Day")
-    private int lowPriceOfTheDay;
+    private double lowPriceOfTheDay;
     @JsonProperty("Open_Price_Of_The_Day")
-    private int openPriceOfTheDay;
+    private double openPriceOfTheDay;
     @JsonProperty("Previous_Close_Price")
-    private int previousClosePrice;
+    private double previousClosePrice;
   }
-}

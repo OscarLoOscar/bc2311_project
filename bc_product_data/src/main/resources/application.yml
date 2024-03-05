@@ -21,13 +21,17 @@ spring:
     username: "postgres"
     password: "admin1234"
     driver-class-name: "org.postgresql.Driver"
-spring.jpa:
-  show-sql: true
-  hibernate.ddl-auto: create-drop # update
-  properties:
-    hibernate:
-      dialect: org.hibernate.dialect.PostgreSQLDialect
-      format_sql: true
-      default_schema: bc2311
-      jdbc:
-        time_zone: UTC
+  jpa:
+    show-sql: true
+    hibernate.ddl-auto: create-drop # update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+        default_schema: bc2311
+        jdbc:
+          time_zone: UTC
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    cache: false

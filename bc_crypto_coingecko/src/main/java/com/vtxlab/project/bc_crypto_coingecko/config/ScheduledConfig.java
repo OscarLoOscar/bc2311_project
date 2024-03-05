@@ -4,11 +4,14 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 import com.vtxlab.project.bc_crypto_coingecko.infra.Mapper;
 import com.vtxlab.project.bc_crypto_coingecko.model.Coingecko;
 import com.vtxlab.project.bc_crypto_coingecko.model.CoingeckoDTO;
@@ -24,6 +27,9 @@ public class ScheduledConfig {
   RedisHelper redisHelper;
 
   @Autowired
+  RestTemplate restTemplate;
+
+  @Autowired
   CoingeckoService coingeckoService;
 
   @Autowired
@@ -35,12 +41,25 @@ public class ScheduledConfig {
   @Value("${redis-key.crypto.coingecko.coins-markets.coin-ids}")
   String coinIds;
 
+  @Autowired
+  @Qualifier("coingeckoUriBuilder")
+  UriComponentsBuilder coingeckoUriBuilder;
+
   private void setDataToRedis(List<CoingeckoDTO> entities) {
     entities.forEach(e -> {
       redisHelper.set(
           "crypto:coingecko:coins-markets:" + currency + ":" + e.getId(), e,
           60);
     });
+  }
+
+  @Scheduled(fixedRate = 60000)
+  public void setData() {
+    log.info("save data to redis");
+    List<Coingecko> result = Arrays.asList(restTemplate
+        .getForObject(coingeckoUriBuilder.toUriString(), Coingecko[].class));
+    redisHelper.lSet("crypto:coingecko:coins-markets", result, 60);
+
   }
 
   // @Scheduled(fixedRate = 60000)
