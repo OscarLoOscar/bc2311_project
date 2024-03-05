@@ -21,7 +21,7 @@ public interface CoingeckoOperation {
   @GetMapping("")
   @ResponseStatus(HttpStatus.OK)
   public ApiResp<List<Coingecko>> getAllData(@RequestParam String currency,
-      @SymbolCheck @RequestParam String ids);
+      @RequestParam String ids);
 
   @GetMapping("/coinList")
   @ResponseStatus(HttpStatus.OK)

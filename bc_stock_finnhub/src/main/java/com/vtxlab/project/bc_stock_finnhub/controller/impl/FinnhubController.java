@@ -23,67 +23,67 @@ public class FinnhubController implements FinnhubOperation {
   @Autowired
   private FinnhubService finnhubService;
 
-  @Value("${api.finnhub.stockSymbol}")
-  private String symbolList;
+  // @Value("${api.finnhub.stockSymbol}")
+  // private String symbolList;
 
   @Override
   public ApiResp<Quote> getQuote(String symbol) {
-    if (symbolIsValid(symbol)) {
-      Quote data = finnhubService.getQuote(symbol);
-      return ApiResp.<Quote>builder() //
-          .syscode(Syscode.OK.getSyscode()) //
-          .message(Syscode.OK.getMessage())//
-          .data(data) //
-          .build();
-    }
+    // if (symbolIsValid(symbol)) {
+    Quote data = finnhubService.getQuote(symbol);
     return ApiResp.<Quote>builder() //
-        .syscode(Syscode.INVALID_INPUT.getSyscode()) //
-        .message(Syscode.INVALID_INPUT.getMessage())//
+        .syscode(Syscode.OK.getSyscode()) //
+        .message(Syscode.OK.getMessage())//
+        .data(data) //
         .build();
+    // }
+    // return ApiResp.<Quote>builder() //
+    // .syscode(Syscode.INVALID_INPUT.getSyscode()) //
+    // .message(Syscode.INVALID_INPUT.getMessage())//
+    // .build();
   }
 
   @Override
   public ApiResp<CompanyProfile> getProfile(String symbol) {
-    if (symbolIsValid(symbol)) {
-      CompanyProfile data = finnhubService.getProfile(symbol);
-      return ApiResp.<CompanyProfile>builder() //
-          .syscode(Syscode.OK.getSyscode()) //
-          .message(Syscode.OK.getMessage())//
-          .data(data) //
-          .build();
-    }
+    // if (symbolIsValid(symbol)) {
+    CompanyProfile data = finnhubService.getProfile(symbol);
     return ApiResp.<CompanyProfile>builder() //
-        .syscode(Syscode.INVALID_INPUT.getSyscode()) //
-        .message(Syscode.INVALID_INPUT.getMessage())//
+        .syscode(Syscode.OK.getSyscode()) //
+        .message(Syscode.OK.getMessage())//
+        .data(data) //
         .build();
+    // }
+    // return ApiResp.<CompanyProfile>builder() //
+    // .syscode(Syscode.INVALID_INPUT.getSyscode()) //
+    // .message(Syscode.INVALID_INPUT.getMessage())//
+    // .build();
   }
 
   @Override
   public ApiResp<StockDTO> getStock(String symbol) {
-    if (symbolIsValid(symbol)) {
-      StockDTO data = finnhubService.getStock(symbol);
-      return ApiResp.<StockDTO>builder() //
-          .syscode(Syscode.OK.getSyscode()) //
-          .message(Syscode.OK.getMessage())//
-          .data(data) //
-          .build();
-    }
+    // if (symbolIsValid(symbol)) {
+    StockDTO data = finnhubService.getStock(symbol);
     return ApiResp.<StockDTO>builder() //
-        .syscode(Syscode.INVALID_INPUT.getSyscode()) //
-        .message(Syscode.INVALID_INPUT.getMessage())//
+        .syscode(Syscode.OK.getSyscode()) //
+        .message(Syscode.OK.getMessage())//
+        .data(data) //
         .build();
+    // }
+    // return ApiResp.<StockDTO>builder() //
+    // .syscode(Syscode.INVALID_INPUT.getSyscode()) //
+    // .message(Syscode.INVALID_INPUT.getMessage())//
+    // .build();
   }
 
-  public boolean symbolIsValid(String symbol) {
-    List<String> symbols = this.getSymbolList();
-    log.info("SIZE : " + symbols.size());
-    return symbols.contains(symbol);
+  // public boolean symbolIsValid(String symbol) {
+  // List<String> symbols = this.getSymbolList();
+  // log.info("SIZE : " + symbols.size());
+  // return symbols.contains(symbol);
 
-  }
+  // }
 
-  public List<String> getSymbolList() {
-    return Arrays.asList(symbolList.split(","));
-  }
+  // public List<String> getSymbolList() {
+  // return Arrays.asList(symbolList.split(","));
+  // }
 
   @Override
   public ApiResp<List<String>> getStockList() {

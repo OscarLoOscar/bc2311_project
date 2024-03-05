@@ -7,10 +7,12 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.Builder;
 import lombok.Data;
 
 @Entity
 @Data
+@Builder
 @Table(name = "texternal_stock_finnhub_profile2")
 public class FinnhubProfileEntity {
   @Id
@@ -26,10 +28,10 @@ public class FinnhubProfileEntity {
   private String finnhubIndustry;
   private String ipo;
   private String logo;
-  private BigDecimal marketCapitalization;
+  private Long marketCapitalization;
   private String name;
   private String phone;
-  private BigDecimal shareOutstanding;
+  private Long shareOutstanding;
   private String ticker;
   private String weburl;
 }

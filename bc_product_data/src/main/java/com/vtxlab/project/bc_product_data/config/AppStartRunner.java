@@ -3,8 +3,8 @@ package com.vtxlab.project.bc_product_data.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
-import com.vtxlab.project.bc_product_data.repository.CoinListRepo;
-import com.vtxlab.project.bc_product_data.repository.StockListRepo;
+import com.vtxlab.project.bc_product_data.repository.coin.CoinListRepo;
+import com.vtxlab.project.bc_product_data.repository.stock.StockListRepo;
 import com.vtxlab.project.bc_product_data.service.ValidListService;
 
 @Component

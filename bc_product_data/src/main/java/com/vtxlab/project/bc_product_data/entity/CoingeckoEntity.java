@@ -3,6 +3,7 @@ package com.vtxlab.project.bc_product_data.entity;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -29,12 +30,14 @@ public class CoingeckoEntity implements Serializable {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
 
-  private Timestamp quoteDate;
-  private BigDecimal currPrice;
-  private BigDecimal priceChg;
-  private BigDecimal priceChgPot;
-  private BigDecimal priceDayHigh;
-  private BigDecimal priceDayLow;
-  private BigDecimal pricePrevOpen;
-  private BigDecimal pricePrevClose;
+  private String coinId;
+  private String symbol;
+  private String name;
+  private String image;
+  private long totalVolume;
+  private double currentPrice;
+  private Long marketCap;
+  private long marketCapRank;
+  @JsonProperty("price_change_percentage_24h")
+  private double priceChangePercentage24h;
 }

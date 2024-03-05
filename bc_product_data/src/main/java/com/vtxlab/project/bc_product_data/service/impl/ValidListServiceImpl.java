@@ -1,6 +1,5 @@
 package com.vtxlab.project.bc_product_data.service.impl;
 
-import java.util.Arrays;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -13,8 +12,8 @@ import com.vtxlab.project.bc_product_data.model.request.CoinListRequestDTO;
 import com.vtxlab.project.bc_product_data.model.request.StockListRequestDTO;
 import com.vtxlab.project.bc_product_data.model.response.CoinListResponseDTO;
 import com.vtxlab.project.bc_product_data.model.response.StockListResponseDTO;
-import com.vtxlab.project.bc_product_data.repository.CoinListRepo;
-import com.vtxlab.project.bc_product_data.repository.StockListRepo;
+import com.vtxlab.project.bc_product_data.repository.coin.CoinListRepo;
+import com.vtxlab.project.bc_product_data.repository.stock.StockListRepo;
 import com.vtxlab.project.bc_product_data.service.ValidListService;
 import lombok.extern.slf4j.Slf4j;
 
@@ -46,39 +45,41 @@ public class ValidListServiceImpl implements ValidListService {
         restTemplate.getForObject(coingeckoUriString.build(false).toUriString(),
             CoinListRequestDTO.class);
     rawData.getData().stream()//
-        .map(e -> CoinList.builder().coinId(e).build())//
+        .map(e -> CoinList.builder().coinCode(e).build())//
         .forEach(coinListRepo::save);
     return true;
   }
 
   @Override
   public boolean saveStockList() {
-    log.info("check stock: " + finnhubStockUriString.build(false).toUriString());
+    log.info(
+        "check stock: " + finnhubStockUriString.build(false).toUriString());
 
     StockListRequestDTO rawData = restTemplate.getForObject(
-        finnhubStockUriString.build(false).toUriString(), StockListRequestDTO.class);
+        finnhubStockUriString.build(false).toUriString(),
+        StockListRequestDTO.class);
     rawData.getData().stream()//
-        .map(e -> StockList.builder().stockId(e).build())//
+        .map(e -> StockList.builder().stockCode(e).build())//
         .forEach(stockListRepo::save);
     return true;
   }
 
   @Override
   public boolean deleteCoin(String coinId) {
-    coinListRepo.deleteByCoinId(coinId);
+    coinListRepo.deleteByCoinCode(coinId);
     return true;
   }
 
   @Override
   public boolean deleteStock(String stockId) {
-    stockListRepo.deleteByStockId(stockId);
+    stockListRepo.deleteByStockCode(stockId);
     return true;
   }
 
   @Override
   public CoinListResponseDTO getCoinList() {
     List<String> data = coinListRepo.findAll().stream()//
-        .map(coinList -> coinList.getCoinId())//
+        .map(coinList -> coinList.getCoinCode())//
         .toList();
     return CoinListResponseDTO.builder()//
         .coinList(data)//
@@ -88,7 +89,7 @@ public class ValidListServiceImpl implements ValidListService {
   @Override
   public StockListResponseDTO getStockList() {
     List<String> data = stockListRepo.findAll().stream()//
-        .map(stockList -> stockList.getStockId())//
+        .map(stockList -> stockList.getStockCode())//
         .toList();
     return StockListResponseDTO.builder()//
         .stockList(data)//

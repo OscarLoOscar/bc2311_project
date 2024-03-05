@@ -16,18 +16,18 @@ public class StockDTO {
   private String ticker;
 
   @JsonProperty("Current_Price")
-  private Double currentPrice;
+  private double currentPrice;
   @JsonProperty("Change")
-  private Double change;
+  private double change;
   @JsonProperty("Percent_Change")
-  private Double percentChange;
+  private double percentChange;
   @JsonProperty("High_Price_Of_The_Day")
-  private Double highPrice;
+  private double highPrice;
   @JsonProperty("Low_Price_Of_The_Day")
-  private Double lowPrice;
+  private double lowPrice;
   @JsonProperty("Open_Price_Of_The_Day")
-  private Double openPrice;
+  private double openPrice;
   @JsonProperty("Previous_Close_Price")
-  private Double closePrice;
+  private double closePrice;
 
 }

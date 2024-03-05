@@ -1,10 +1,10 @@
-package com.vtxlab.project.bc_product_data.repository;
+package com.vtxlab.project.bc_product_data.repository.stock;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import com.vtxlab.project.bc_product_data.entity.StockList;
 
 public interface StockListRepo extends JpaRepository<StockList, Integer> {
 
-  void deleteByStockId(String stockId);
+  void deleteByStockCode(String stockCode);
 
 }

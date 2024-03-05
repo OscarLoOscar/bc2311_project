@@ -20,6 +20,12 @@ import lombok.Setter;
 @Builder // Nice to have
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class CoinMarketRespDto {
+  public CoinMarketRespDto(String id, String symbol, String name) {
+    this.id = id;
+    this.symbol = symbol;
+    this.name = name;
+  }
+
   private String id;
   private String symbol;
   private String name;

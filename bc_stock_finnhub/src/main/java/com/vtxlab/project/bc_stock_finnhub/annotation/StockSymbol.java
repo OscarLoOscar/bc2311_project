@@ -10,10 +10,10 @@ import lombok.Getter;
 @AllArgsConstructor
 public class StockSymbol {
 
-  @Value("${api.finnhub.stockSymbol}")
-  private String stockSymbol;
+  // @Value("${api.finnhub.stockSymbol}")
+  // private String stockSymbol;
 
-  public List<String> getStockIds() {
-    return Arrays.asList(stockSymbol.split(","));
-  }
+  // public List<String> getStockIds() {
+  //   return Arrays.asList(stockSymbol.split(","));
+  // }
 }

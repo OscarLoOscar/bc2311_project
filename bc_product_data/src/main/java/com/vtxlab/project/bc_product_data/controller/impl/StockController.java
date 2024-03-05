@@ -7,6 +7,7 @@ import com.vtxlab.project.bc_product_data.controller.StockOperation;
 import com.vtxlab.project.bc_product_data.model.CompanyProfile;
 import com.vtxlab.project.bc_product_data.model.Quote;
 import com.vtxlab.project.bc_product_data.model.StockDTO;
+import com.vtxlab.project.bc_product_data.model.response.CompanyProfileResponseDTO;
 import com.vtxlab.project.bc_product_data.model.response.QuoteResponseDTO;
 import com.vtxlab.project.bc_product_data.service.StockService;
 
@@ -23,7 +24,7 @@ public class StockController implements StockOperation {
   }
 
   @Override
-  public CompanyProfile getProfile(String symbol) {
+  public CompanyProfileResponseDTO getProfile(String symbol) {
     return stockService.getProfile(symbol);
   }
 }

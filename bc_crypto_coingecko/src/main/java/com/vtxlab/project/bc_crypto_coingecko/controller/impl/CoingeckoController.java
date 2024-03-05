@@ -1,7 +1,6 @@
 package com.vtxlab.project.bc_crypto_coingecko.controller.impl;
 
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +21,9 @@ public class CoingeckoController implements CoingeckoOperation {
 
   @Autowired
   private CoingeckoService coingeckoService;
+
   @Autowired
-  ModelMapper mapper;
+  ModelMapper modelMapper;
 
   @Override
   public ApiResp<List<Coingecko>> getAllData(String currency, String ids) {
@@ -49,7 +49,7 @@ public class CoingeckoController implements CoingeckoOperation {
   @CrossOrigin
   public List<CoinMarketRespDto> getMarketData() {
     return coingeckoService.getCoinMarket().stream()//
-        .map(coin -> mapper.map(coin, CoinMarketRespDto.class))//
+        .map(coin -> modelMapper.map(coin, CoinMarketRespDto.class))//
         .collect(Collectors.toList());
   }
 

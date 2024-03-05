@@ -1,11 +1,9 @@
 package com.vtxlab.project.bc_crypto_coingecko.exception;
 
-import java.util.List;
 import java.util.Objects;
 import org.springframework.validation.BindingResult;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.vtxlab.project.bc_crypto_coingecko.exception.exceptionEnum.Syscode;
-import com.vtxlab.project.bc_crypto_coingecko.model.Coingecko;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ApiResp<T> {
@@ -69,7 +67,8 @@ public class ApiResp<T> {
       return this;
     }
 
-    public ApiResponseBuilder<T> error(Syscode syscode, BindingResult bindingResult) {
+    public ApiResponseBuilder<T> error(Syscode syscode,
+        BindingResult bindingResult) {
       this.syscode = syscode.getSyscode();
       this.message =
           bindingResult.getFieldError() != null

@@ -8,19 +8,19 @@ import lombok.Data;
 @Data
 public class QuoteResponseDTO {
     @JsonProperty("Current_Price")
-    private Double c;
+    private double c;
     @JsonProperty("Change")
-    private Double d;
+    private double d;
     @JsonProperty("Percent_Change")
-    private Double dp;
+    private double dp;
     @JsonProperty("High_Price_Of_The_Day")
-    private Double h;
+    private double h;
     @JsonProperty("Low_Price_Of_The_Day")
-    private Double l;
+    private double l;
     @JsonProperty("Open_Price_Of_The_Day")
-    private Double o;
+    private double o;
     @JsonProperty("Previous_Close_Price")
-    private Double pc;
+    private double pc;
     @JsonProperty("TimeStamp")
     private Long t;
 }

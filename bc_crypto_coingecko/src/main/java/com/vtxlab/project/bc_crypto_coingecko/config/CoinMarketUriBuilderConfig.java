@@ -29,20 +29,20 @@ public class CoinMarketUriBuilderConfig {
   @Value("${api.coingecko.coins.vs_currency}")
   private String coinsVsCurrency;
 
-  @Value("${api.coingecko.coins.order}")
-  private String coinsOrder;
+  // @Value("${api.coingecko.coins.order}")
+  // private String coinsOrder;
 
-  @Value("${api.coingecko.coins.per_page}")
-  private String coinsPerPage;
+  // @Value("${api.coingecko.coins.per_page}")
+  // private String coinsPerPage;
 
-  @Value("${api.coingecko.coins.page}")
-  private String coinsPage;
+  // @Value("${api.coingecko.coins.page}")
+  // private String coinsPage;
 
-  @Value("${api.coingecko.coins.sparkline}")
-  private String coinsSparkline;
+  // @Value("${api.coingecko.coins.sparkline}")
+  // private String coinsSparkline;
 
-  @Value("${api.coingecko.coins.locale}")
-  private String coinsLocale;
+  // @Value("${api.coingecko.coins.locale}")
+  // private String coinsLocale;
 
   @Bean
   UriComponentsBuilder coingeckoUriBuilder() {

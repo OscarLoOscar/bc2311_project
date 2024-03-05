@@ -5,24 +5,50 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import com.vtxlab.project.bc_product_data.infra.Mapper;
+import com.vtxlab.project.bc_product_data.model.response.CoinListResponseDTO;
+import com.vtxlab.project.bc_product_data.model.response.StockListResponseDTO;
+import com.vtxlab.project.bc_product_data.service.CoingeckoService;
+import com.vtxlab.project.bc_product_data.service.StockService;
+import com.vtxlab.project.bc_product_data.service.impl.ValidListServiceImpl;
 
 @Component
 @EnableScheduling
 public class ScheduledConfig {
 
+  @Autowired
+  private ValidListServiceImpl validListService;
 
-  // @Scheduled(fixedRate = 6000)
-  public void scheduleFixedRateTask() {
-    // make System.currentTimeMillis() to seconds
-    System.out
-        .println("Fixed rate task - " + System.currentTimeMillis() / 1000);
+  @Autowired
+  private CoingeckoService coingeckoService;
+
+  @Autowired
+  private StockService stockService;
+
+  @Autowired
+  private Mapper mapper;
+
+  @Scheduled(fixedRate = 60000)
+  public void saveCoinGecko() {
+    CoinListResponseDTO coinList = validListService.getCoinList();
+    coinList.getCoinList().stream()//
+        .limit(10)//
+        .map(e -> coingeckoService.getCoinData(e))//
+        .map(e -> mapper.map(e))//
+        .forEach(coingeckoService::saveCoinData);
   }
 
 
   // @Scheduled(fixedDelay = 3000)
-  public void scheduleFixedDelayTask() {
-    System.out
-        .println("Fixed delay task - " + System.currentTimeMillis() / 1000);
+  @Scheduled(fixedRate = 60000)
+  public void saveStockQuote() {
+    StockListResponseDTO stockList = validListService.getStockList();
+    stockList.getStockList().stream()//
+        .limit(10)//
+        .forEach(stockService::saveQuote);
+    stockList.getStockList().stream()//
+        .limit(10)//
+        .forEach(stockService::saveProfile);
   }
 
 

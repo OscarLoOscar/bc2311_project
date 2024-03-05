@@ -5,9 +5,13 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
+import com.vtxlab.project.bc_product_data.infra.Mapper;
 import com.vtxlab.project.bc_product_data.model.CompanyProfile;
 import com.vtxlab.project.bc_product_data.model.Quote;
+import com.vtxlab.project.bc_product_data.model.response.CompanyProfileResponseDTO;
 import com.vtxlab.project.bc_product_data.model.response.QuoteResponseDTO;
+import com.vtxlab.project.bc_product_data.repository.stock.FinnhubProfileRepo;
+import com.vtxlab.project.bc_product_data.repository.stock.FinnhubQuoteRepo;
 import com.vtxlab.project.bc_product_data.service.StockService;
 import lombok.extern.slf4j.Slf4j;
 
@@ -17,6 +21,15 @@ public class StockServiceImpl implements StockService {
 
   @Autowired
   private RestTemplate restTemplate;
+
+  @Autowired
+  private Mapper mapper;
+
+  @Autowired
+  private FinnhubQuoteRepo finnhubQuoteRepo;
+
+  @Autowired
+  private FinnhubProfileRepo finnhubProfileRepo;
 
   @Autowired
   @Qualifier("finnhubQuoteUriString")
@@ -47,11 +60,26 @@ public class StockServiceImpl implements StockService {
   }
 
   @Override
-  public CompanyProfile getProfile(String symbol) {
+  public CompanyProfileResponseDTO getProfile(String symbol) {
     log.info("Service getProfile: " + finnhubProfileUriString
         .replaceQueryParam("symbol", symbol).build(false).toUriString());
-    return restTemplate.getForObject(finnhubProfileUriString
+    CompanyProfile data = restTemplate.getForObject(finnhubProfileUriString
         .replaceQueryParam("symbol", symbol).build(false).toUriString(),
         CompanyProfile.class);
+    return mapper.map(data);
+  }
+
+  @Override
+  public boolean saveQuote(String symbol) {
+    QuoteResponseDTO data = this.getQuote(symbol);
+    finnhubQuoteRepo.save(mapper.map(symbol, data));
+    return true;
+  }
+
+  @Override
+  public boolean saveProfile(String symbol) {
+    CompanyProfileResponseDTO data = this.getProfile(symbol);
+    finnhubProfileRepo.save(mapper.map(data));
+    return true;
   }
 }
