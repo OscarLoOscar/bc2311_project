@@ -1,20 +1,28 @@
 package com.vtxlab.project.bc_crypto_coingecko.controller.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.vtxlab.project.bc_crypto_coingecko.controller.CoingeckoOperation;
 import com.vtxlab.project.bc_crypto_coingecko.exception.ApiResp;
 import com.vtxlab.project.bc_crypto_coingecko.exception.exceptionEnum.Syscode;
 import com.vtxlab.project.bc_crypto_coingecko.model.CoinMarketRespDto;
 import com.vtxlab.project.bc_crypto_coingecko.model.Coingecko;
 import com.vtxlab.project.bc_crypto_coingecko.service.CoingeckoService;
+import lombok.extern.slf4j.Slf4j;
 
 
+@Slf4j
 @RestController
 @RequestMapping("/crypto/coingecko/api/v1")
 public class CoingeckoController implements CoingeckoOperation {
@@ -24,6 +32,12 @@ public class CoingeckoController implements CoingeckoOperation {
 
   @Autowired
   ModelMapper modelMapper;
+
+  @Autowired
+  ObjectMapper objectMapper;
+
+  @Autowired
+  com.vtxlab.project.bc_crypto_coingecko.config.RedisHelper redisHelper;
 
   @Override
   public ApiResp<List<Coingecko>> getAllData(String currency, String ids) {
@@ -52,5 +66,15 @@ public class CoingeckoController implements CoingeckoOperation {
         .map(coin -> modelMapper.map(coin, CoinMarketRespDto.class))//
         .collect(Collectors.toList());
   }
+
+  @GetMapping("testRedis")
+  public List<Coingecko> getfromRedis() throws JsonMappingException, JsonProcessingException {
+      objectMapper.registerModule(new JavaTimeModule());
+      List<Coingecko> jsonStrings = redisHelper.lGet("crypto:coingecko:coins-markets", 0, -1,Coingecko.class);
+
+      return jsonStrings;
+  }
+  
+  
 
 }

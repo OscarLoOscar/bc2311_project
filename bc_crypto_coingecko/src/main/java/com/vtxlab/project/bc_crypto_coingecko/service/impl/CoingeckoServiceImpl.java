@@ -1,6 +1,5 @@
 package com.vtxlab.project.bc_crypto_coingecko.service.impl;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -10,16 +9,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vtxlab.project.bc_crypto_coingecko.config.RedisHelper;
 import com.vtxlab.project.bc_crypto_coingecko.infra.Mapper;
 import com.vtxlab.project.bc_crypto_coingecko.model.Coingecko;
 import com.vtxlab.project.bc_crypto_coingecko.model.CoingeckoDTO;
 import com.vtxlab.project.bc_crypto_coingecko.service.CoingeckoService;
 import lombok.extern.slf4j.Slf4j;
-import java.util.List; // Import the List class
-import com.vtxlab.project.bc_crypto_coingecko.model.Coingecko; // Import the Coingecko class
 
 @Slf4j
 @Service
@@ -48,8 +43,7 @@ public class CoingeckoServiceImpl implements CoingeckoService {
   public List<Coingecko> getDataFromApi(String currency, String ids) {
     List<String> inputCoinIdList = Arrays.asList(ids.split(","));
     log.info("getDataFromApi , before redisHelper.lGet");
-    List<Coingecko> rawData = redisHelper.lGet("crypto:coingecko:coins-markets",
-        0, -1, Coingecko.class);
+    List<Coingecko> rawData = redisHelper.lGet("crypto:coingecko:coins-markets",0,1,Coingecko.class);
 
     List<String> coinIdList = Arrays.asList(coinIds.split(","));
     log.info(coinIdList.size() + " size");
@@ -83,8 +77,7 @@ public class CoingeckoServiceImpl implements CoingeckoService {
     // .getForObject(coingeckoUriBuilder.toUriString(), Coingecko[].class));
     // redisHelper.lSet("crypto:coingecko:coins-markets", result, 60);
     log.info("getCoinMarket , before redisHelper.lGet");
-    List<Coingecko> result = redisHelper.lGet("crypto:coingecko:coins-markets",
-        0, -1, Coingecko.class);
+    List<Coingecko> result = redisHelper.lGet("crypto:coingecko:coins-markets", 0, 0, Coingecko.class);
     return result;
   }
 
@@ -92,8 +85,8 @@ public class CoingeckoServiceImpl implements CoingeckoService {
   public List<String> getCoinList() {
     log.info("getCoinList , before redisHelper.lGet");
 
-    return redisHelper
-        .lGet("crypto:coingecko:coins-markets", 0, -1, Coingecko.class).stream()
-        .map(Coingecko::getId).collect(Collectors.toList());
+    return (List<String>) redisHelper
+        .lGet("crypto:coingecko:coins-markets",0,1,Coingecko.class).stream()
+        .map(coingecko -> (String)((Coingecko) coingecko).getId()).collect(Collectors.toList());
   }
 }

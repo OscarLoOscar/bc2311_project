@@ -45,12 +45,13 @@ public class ScheduledConfig {
   @Qualifier("coingeckoUriBuilder")
   UriComponentsBuilder coingeckoUriBuilder;
 
+  // @SuppressWarnings("unchecked")
   private void setDataToRedis(List<CoingeckoDTO> entities) {
-    entities.forEach(e -> {
-      redisHelper.set(
-          "crypto:coingecko:coins-markets:" + currency + ":" + e.getId(), e,
-          60);
-    });
+    // entities.forEach(e -> {
+    //   redisHelper
+    //       .listPush("crypto:coingecko:coins:" + currency + ":" + e.getId(), e);
+    // });
+    redisHelper.lSet("crypto:coingecko:coins:" + currency , entities);
   }
 
   @Scheduled(fixedRate = 60000)
@@ -58,7 +59,7 @@ public class ScheduledConfig {
     log.info("save data to redis");
     List<Coingecko> result = Arrays.asList(restTemplate
         .getForObject(coingeckoUriBuilder.toUriString(), Coingecko[].class));
-    redisHelper.lSet("crypto:coingecko:coins-markets", result, 60);
+    redisHelper.lSet("crypto:coingecko:coins-markets", result);
 
   }
 

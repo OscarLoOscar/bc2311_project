@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cryptocurrency Exchange</title>
-    <link rel="stylesheet" href="coin.css">
+    <link rel="stylesheet" href="../static/coin.css">
 </head>
 
 <body>
@@ -29,37 +29,6 @@
                     <!-- price -->
                     <div>
                         <p class="font-bold text-xs lg:text-base flex justify-end "
-                            th:text="${{ $filters.comma_separator(coin.current_price) }}"></p>
-                        <!-- percent red -->
-                        <p class="font-bold text-xs text-red-400 flex justify-end items-center "
-                            th:if="${$filters.price_negative(coin.price_change_percentage_24h)}">
-                            <fa icon="caret-down" class="mr-1" />
-                            <span th:text="${$filters.string_trunc(coin.price_change_percentage_24h, 5)}"></span>%
-                        </p>
-                        <!-- percent green -->
-                        <p th:else class="font-bold text-xs text-green-400 flex justify-end items-center ">
-                            <fa icon="caret-up" class="mr-1" />
-                            <span th:text="${$filters.string_trunc(coin.price_change_percentage_24h, 5)}"></span>%
-                        </p>
-                    </div>
-                </div>
-            </li>
-            <!-- clones -->
-            <!-- 1 -->
-            <li class="flex justify-center items-center flex-shrink-0 text-white transform scale-75 lg:scale-100"
-                th:for="coin : ${cloneCoins}" th:key="${coin.name}">
-                <div class="flex justify-between w-3/4">
-                    <!-- ticker -->
-                    <div class="flex items-center">
-                        <img th:src="${coin.image}" alt="coin logo" class="w-4 h-4 lg:w-6 lg:h-6 rounded-full mr-4 " />
-                        <div class="hidden lg:block">
-                            <p class="font-bold" th:text="${coin.name}"></p>
-                            <p class="text-xs uppercase tracking-widest" th:text="${coin.symbol}"></p>
-                        </div>
-                    </div>
-                    <!-- price -->
-                    <div>
-                        <p class="font-bold flex justify-end text-xs lg:text-base"
                             th:text="${{ $filters.comma_separator(coin.current_price) }}"></p>
                         <!-- percent red -->
                         <p class="font-bold text-xs text-red-400 flex justify-end items-center "
@@ -136,7 +105,7 @@
             </tbody>
         </table>
     </div>
-    <script src="coin.js"></script>
+    <script src="../static/coin.js"></script>
 </body>
 
 </html>
