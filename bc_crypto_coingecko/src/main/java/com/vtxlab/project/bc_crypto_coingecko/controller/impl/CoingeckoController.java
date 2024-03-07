@@ -37,7 +37,7 @@ public class CoingeckoController implements CoingeckoOperation {
   ObjectMapper objectMapper;
 
   @Autowired
-  com.vtxlab.project.bc_crypto_coingecko.config.RedisHelper redisHelper;
+  com.vtxlab.project.bc_crypto_coingecko.redis.RedisHelper redisHelper;
 
   @Override
   public ApiResp<List<Coingecko>> getAllData(String currency, String ids) {

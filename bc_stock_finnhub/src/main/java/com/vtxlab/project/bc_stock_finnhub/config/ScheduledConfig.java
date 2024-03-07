@@ -8,9 +8,9 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import com.vtxlab.project.bc_stock_finnhub.infra.Mapper;
-import com.vtxlab.project.bc_stock_finnhub.infra.RedisHelper;
 import com.vtxlab.project.bc_stock_finnhub.model.CompanyProfile;
 import com.vtxlab.project.bc_stock_finnhub.model.Quote;
+import com.vtxlab.project.bc_stock_finnhub.redis.RedisHelper;
 import com.vtxlab.project.bc_stock_finnhub.service.FinnhubService;
 
 @Component

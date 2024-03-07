@@ -11,6 +11,7 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.web.client.RestTemplate;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vtxlab.project.bc_crypto_coingecko.redis.CustomJackson2JsonRedisSerializer;
+import com.vtxlab.project.bc_crypto_coingecko.redis.RedisHelper;
 
 @Configuration
 public class AppConfig {

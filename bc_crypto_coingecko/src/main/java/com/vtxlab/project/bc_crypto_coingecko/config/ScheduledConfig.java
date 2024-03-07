@@ -15,6 +15,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import com.vtxlab.project.bc_crypto_coingecko.infra.Mapper;
 import com.vtxlab.project.bc_crypto_coingecko.model.Coingecko;
 import com.vtxlab.project.bc_crypto_coingecko.model.CoingeckoDTO;
+import com.vtxlab.project.bc_crypto_coingecko.redis.RedisHelper;
 import com.vtxlab.project.bc_crypto_coingecko.service.CoingeckoService;
 import lombok.extern.slf4j.Slf4j;
 
