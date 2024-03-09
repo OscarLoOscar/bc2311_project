@@ -2,6 +2,7 @@ package com.vtxlab.project.bc_crypto_coingecko.controller.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,19 +63,23 @@ public class CoingeckoController implements CoingeckoOperation {
   @Override
   @CrossOrigin
   public List<CoinMarketRespDto> getMarketData() {
-    return coingeckoService.getCoinMarket().stream()//
+    return (List<CoinMarketRespDto>) (List<?>) redisHelper
+        .lGet("crypto:coingecko:coins-markets", 0, -1, Coingecko.class).stream()//
         .map(coin -> modelMapper.map(coin, CoinMarketRespDto.class))//
         .collect(Collectors.toList());
+
   }
 
   @GetMapping("testRedis")
-  public List<Coingecko> getfromRedis() throws JsonMappingException, JsonProcessingException {
-      objectMapper.registerModule(new JavaTimeModule());
-      List<Coingecko> jsonStrings = redisHelper.lGet("crypto:coingecko:coins-markets", 0, -1,Coingecko.class);
+  public List<Coingecko> getfromRedis()
+      throws JsonMappingException, JsonProcessingException {
+    objectMapper.registerModule(new JavaTimeModule());
+    List<Coingecko> jsonStrings = redisHelper
+        .lGet("crypto:coingecko:coins-markets", 0, -1, Coingecko.class);
 
-      return jsonStrings;
+    return jsonStrings;
   }
-  
-  
+
+
 
 }

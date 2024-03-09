@@ -2,6 +2,7 @@ package com.vtxlab.project.bc_crypto_coingecko.service.impl;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -43,7 +44,8 @@ public class CoingeckoServiceImpl implements CoingeckoService {
   public List<Coingecko> getDataFromApi(String currency, String ids) {
     List<String> inputCoinIdList = Arrays.asList(ids.split(","));
     log.info("getDataFromApi , before redisHelper.lGet");
-    List<Coingecko> rawData = redisHelper.lGet("crypto:coingecko:coins-markets",0,1,Coingecko.class);
+    List<Coingecko> rawData = redisHelper.lGet("crypto:coingecko:coins-markets",
+        0, 1, Coingecko.class);
 
     List<String> coinIdList = Arrays.asList(coinIds.split(","));
     log.info(coinIdList.size() + " size");
@@ -77,7 +79,8 @@ public class CoingeckoServiceImpl implements CoingeckoService {
     // .getForObject(coingeckoUriBuilder.toUriString(), Coingecko[].class));
     // redisHelper.lSet("crypto:coingecko:coins-markets", result, 60);
     log.info("getCoinMarket , before redisHelper.lGet");
-    List<Coingecko> result = redisHelper.lGet("crypto:coingecko:coins-markets", 0, 0, Coingecko.class);
+    List<Coingecko> result = redisHelper.lGet("crypto:coingecko:coins-markets",
+        0, -1, Coingecko.class);
     return result;
   }
 
@@ -86,7 +89,10 @@ public class CoingeckoServiceImpl implements CoingeckoService {
     log.info("getCoinList , before redisHelper.lGet");
 
     return (List<String>) redisHelper
-        .lGet("crypto:coingecko:coins-markets",0,1,Coingecko.class).stream()
-        .map(coingecko -> (String)((Coingecko) coingecko).getId()).collect(Collectors.toList());
+        .<Coingecko>lGet("crypto:coingecko:coins-markets", 0, -1,
+            Coingecko.class)
+        .stream().filter(Objects::nonNull)
+        .map(coingecko -> ((Coingecko) coingecko).getSymbol())
+        .collect(Collectors.toList());
   }
 }

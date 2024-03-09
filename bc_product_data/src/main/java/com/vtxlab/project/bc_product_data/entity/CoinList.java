@@ -1,5 +1,6 @@
 package com.vtxlab.project.bc_product_data.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -21,5 +22,6 @@ public class CoinList {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   Integer id;
 
+  @Column(length = 1000)
   String coinCode;
 }

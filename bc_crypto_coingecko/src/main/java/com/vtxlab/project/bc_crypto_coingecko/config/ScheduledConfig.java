@@ -49,10 +49,10 @@ public class ScheduledConfig {
   // @SuppressWarnings("unchecked")
   private void setDataToRedis(List<CoingeckoDTO> entities) {
     // entities.forEach(e -> {
-    //   redisHelper
-    //       .listPush("crypto:coingecko:coins:" + currency + ":" + e.getId(), e);
+    // redisHelper
+    // .listPush("crypto:coingecko:coins:" + currency + ":" + e.getId(), e);
     // });
-    redisHelper.lSet("crypto:coingecko:coins:" + currency , entities);
+    redisHelper.lSet("crypto:coingecko:coins:" + currency, entities);
   }
 
   @Scheduled(fixedRate = 60000)
@@ -60,7 +60,7 @@ public class ScheduledConfig {
     log.info("save data to redis");
     List<Coingecko> result = Arrays.asList(restTemplate
         .getForObject(coingeckoUriBuilder.toUriString(), Coingecko[].class));
-    redisHelper.lSet("crypto:coingecko:coins-markets", result);
+    redisHelper.lSet("crypto:coingecko:coins-markets", result, 59);
 
   }
 
@@ -70,7 +70,7 @@ public class ScheduledConfig {
     List<Coingecko> targetData = coingeckoService.getCoinMarket();
 
     List<String> validCoinList = Arrays.asList(coinIds.split(","));
-    log.info("validCoinList: {}", validCoinList);
+   // log.info("validCoinList: {}", validCoinList);
     validCoinList.stream()//
         .forEach(coinId -> {
           List<CoingeckoDTO> result = targetData.stream()//

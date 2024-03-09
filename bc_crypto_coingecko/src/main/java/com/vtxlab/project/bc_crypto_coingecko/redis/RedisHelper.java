@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -17,6 +18,7 @@ import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -60,6 +62,7 @@ public class RedisHelper<T> {
   public RedisHelper(RedisConnectionFactory factory,
       ObjectMapper redisObjectMapper) {
     this.redisTemplate = template(factory, redisObjectMapper);
+    redisObjectMapper.registerModule(new JavaTimeModule());
   }
 
   public static <T> RedisTemplate<String, T> template(
@@ -321,7 +324,8 @@ public class RedisHelper<T> {
     try {
       List<T> range =
           (List<T>) redisTemplate.opsForList().range(key, start, end);
-      return range.stream().<T>map(obj -> deserializeObject(obj, clazz))
+      return range.stream().filter(obj -> obj != null)//
+          .map(obj -> deserializeObject(obj, clazz))//
           .collect(Collectors.toList());
     } catch (Exception e) {
       log.error("Error getting list values from Redis for key: {}", key, e);
@@ -384,6 +388,18 @@ public class RedisHelper<T> {
   public boolean lSet(String key, List<T> value) {
     try {
       redisTemplate.opsForList().rightPushAll(key, value);
+
+      return true;
+    } catch (Exception e) {
+      log.error("Error setting list values for key: {}", key, e);
+      return false;
+    }
+  }
+
+  public boolean lSet(String key, List<T> value, long time) {
+    try {
+      redisTemplate.opsForList().rightPushAll(key, value);
+      redisTemplate.expire(key, time, TimeUnit.SECONDS);
       return true;
     } catch (Exception e) {
       log.error("Error setting list values for key: {}", key, e);
