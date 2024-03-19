@@ -30,10 +30,10 @@ public class CoinMarketRespDto {
   private String symbol;
   private String name;
   private String image;
-  private BigInteger totalVolume;
-  private BigDecimal currentPrice;
-  private Long marketCap;
-  private Integer marketCapRank;
+  private long totalVolume;
+  private double currentPrice;
+  private long marketCap;
+  private long marketCapRank;
   @JsonProperty("price_change_percentage_24h")
-  private BigDecimal priceChangePercentage24h;
+  private double priceChangePercentage24h;
 }

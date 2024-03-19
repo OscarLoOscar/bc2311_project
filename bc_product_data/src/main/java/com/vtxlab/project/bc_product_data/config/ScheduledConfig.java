@@ -32,9 +32,15 @@ public class ScheduledConfig {
   public void saveCoinGecko() {
     CoinListResponseDTO coinList = validListService.getCoinList();
     coinList.getCoinList().stream()//
+    .limit(1)//
+    .map(symbol->coingeckoService.getCoinData(symbol))//
+    .map(coingeckoDto->mapper.map(coingeckoDto))// 0,0,0,0
+    .forEach(System.out::println);
+    
+    coinList.getCoinList().stream()//
         .limit(10)//
-        .map(e -> coingeckoService.getCoinData(e))//
-        .map(e -> mapper.map(e))//
+        .map(symbol -> coingeckoService.getCoinData(symbol))//
+        .map(coingeckoDto -> mapper.map(coingeckoDto))// 0,0,0,0
         .forEach(coingeckoService::saveCoinData);
   }
 

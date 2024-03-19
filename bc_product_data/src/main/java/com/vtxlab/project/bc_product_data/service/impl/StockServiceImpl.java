@@ -42,11 +42,12 @@ public class StockServiceImpl implements StockService {
 
   @Override
   public QuoteResponseDTO getQuote(String symbol) {
-    log.info("Service getQuote: " + finnhubQuoteUriString
-        .replaceQueryParam("symbol", symbol).build(false).toUriString());
+    // log.info("Service getQuote: " + finnhubQuoteUriString
+    //     .replaceQueryParam("symbol", symbol).build(false).toUriString());
     Quote data = restTemplate.getForObject(finnhubQuoteUriString
         .replaceQueryParam("symbol", symbol).build(false).toUriString(),
         Quote.class);
+    log.info("data.getData().getC() : " + data.getData().getC());
     return QuoteResponseDTO.builder()//
         .c(data.getData().getC())//
         .d(data.getData().getD())//
@@ -61,8 +62,8 @@ public class StockServiceImpl implements StockService {
 
   @Override
   public CompanyProfileResponseDTO getProfile(String symbol) {
-    log.info("Service getProfile: " + finnhubProfileUriString
-        .replaceQueryParam("symbol", symbol).build(false).toUriString());
+    // log.info("Service getProfile: " + finnhubProfileUriString
+    // .replaceQueryParam("symbol", symbol).build(false).toUriString());
     CompanyProfile data = restTemplate.getForObject(finnhubProfileUriString
         .replaceQueryParam("symbol", symbol).build(false).toUriString(),
         CompanyProfile.class);

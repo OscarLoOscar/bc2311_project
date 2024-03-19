@@ -21,21 +21,21 @@ public class Quote {
   @Getter
   @Builder
   public static class Data {
-  @JsonProperty("Current_Price")
+  // @JsonProperty("Current_Price")
   private double c;
-  @JsonProperty("Change")
+  // @JsonProperty("Change")
   private double d;
-  @JsonProperty("Percent_Change")
+  // @JsonProperty("Percent_Change")
   private double dp;
-  @JsonProperty("High_Price_Of_The_Day")
+  // @JsonProperty("High_Price_Of_The_Day")
   private double h;
-  @JsonProperty("Low_Price_Of_The_Day")
+  // @JsonProperty("Low_Price_Of_The_Day")
   private double l;
-  @JsonProperty("Open_Price_Of_The_Day")
+  // @JsonProperty("Open_Price_Of_The_Day")
   private double o;
-  @JsonProperty("Previous_Close_Price")
+  // @JsonProperty("Previous_Close_Price")
   private double pc;
-  @JsonProperty("Timestamp")
+  // @JsonProperty("Timestamp")
   private Long t;
   }
 }

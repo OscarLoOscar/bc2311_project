@@ -36,7 +36,7 @@ public class CoingeckoEntity implements Serializable {
   private String image;
   private long totalVolume;
   private double currentPrice;
-  private Long marketCap;
+  private long marketCap;
   private long marketCapRank;
   @JsonProperty("price_change_percentage_24h")
   private double priceChangePercentage24h;

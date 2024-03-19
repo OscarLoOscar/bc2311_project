@@ -40,7 +40,7 @@ public class CoingeckoServiceImpl implements CoingeckoService {
   @Override
   public CoingeckoDTO getCoinData(String coin) {
     return this.getAllCoinData().stream()//
-        .filter(e -> e.getId().equals(coin))//
+        .filter(e -> e.getSymbol().equals(coin))//
         .findFirst()//
         .orElse(null);
   }

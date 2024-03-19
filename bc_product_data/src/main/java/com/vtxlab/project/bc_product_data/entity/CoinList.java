@@ -22,6 +22,7 @@ public class CoinList {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   Integer id;
 
+  
   @Column(length = 1000)
   String coinCode;
 }

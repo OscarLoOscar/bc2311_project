@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import com.vtxlab.project.bc_product_data.entity.CoingeckoEntity;
 import com.vtxlab.project.bc_product_data.entity.FinnhubProfileEntity;
 import com.vtxlab.project.bc_product_data.entity.FinnhubQuoteEntity;
+import com.vtxlab.project.bc_product_data.model.CoinMarketRespDto;
 import com.vtxlab.project.bc_product_data.model.CoingeckoDTO;
 import com.vtxlab.project.bc_product_data.model.CompanyProfile;
 import com.vtxlab.project.bc_product_data.model.StockDTO;
@@ -19,6 +20,21 @@ public class Mapper {
 
   @Autowired
   ModelMapper modelMapper;
+  
+  public  CoinMarketRespDto map2(CoingeckoDTO coingeckoDTO) {
+    return CoinMarketRespDto.builder()//
+        .id(coingeckoDTO.getId())//
+        .symbol(coingeckoDTO.getSymbol())//
+        .name(coingeckoDTO.getName())//
+        .image(coingeckoDTO.getImage())//
+        .totalVolume(coingeckoDTO.getTotalVolume())//
+        .currentPrice(coingeckoDTO.getCurrentPrice())//
+        .marketCap(coingeckoDTO.getMarketCap())//
+        .marketCapRank(coingeckoDTO.getMarketCapRank())//
+        .priceChangePercentage24h(coingeckoDTO.getPriceChangePercentage24h())//
+        .build();
+  }
+
 
   public CoingeckoEntity map(CoingeckoDTO coingeckoDTO) {
     return CoingeckoEntity.builder()//
