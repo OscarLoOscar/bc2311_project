@@ -3,7 +3,7 @@ server:
 
 api:
   coingecko:
-    key: CG-s43w3741nsRt1x5T69gEA6S9
+    key: 
     domain: api.coingecko.com
     path: /api/v3
     endpoint: /coins/markets
