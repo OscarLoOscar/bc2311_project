@@ -46,4 +46,13 @@ public class CoinController implements CoinOperation {
         .map(e -> mapper.map2(e))//
         .collect(Collectors.toList());
   }
+
+  @Override
+  public CoinMarketRespDto getMarketDataByCoinID(String symbol) {
+    return coingeckoService.getAllCoinData().stream()//
+        .filter(e -> e.getSymbol().equals(symbol))//
+        .map(e -> mapper.map2(e))//
+        .findFirst()//
+        .get();
+  }
 }

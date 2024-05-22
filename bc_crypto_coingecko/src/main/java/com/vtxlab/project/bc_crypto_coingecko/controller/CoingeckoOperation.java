@@ -6,7 +6,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import com.vtxlab.project.bc_crypto_coingecko.annotation.SymbolCheck;
 import com.vtxlab.project.bc_crypto_coingecko.exception.ApiResp;
 import com.vtxlab.project.bc_crypto_coingecko.model.CoinMarketRespDto;
 import com.vtxlab.project.bc_crypto_coingecko.model.Coingecko;

@@ -1,6 +1,7 @@
 package com.vtxlab.project.bc_product_data.controller.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.vtxlab.project.bc_product_data.controller.StockOperation;
@@ -11,6 +12,7 @@ import com.vtxlab.project.bc_product_data.model.response.QuoteResponseDTO;
 import com.vtxlab.project.bc_product_data.service.StockService;
 
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping("/api/v1")
 public class StockController implements StockOperation {
 

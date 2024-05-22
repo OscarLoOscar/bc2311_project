@@ -1,6 +1,7 @@
 package com.vtxlab.project.bc_product_data.controller.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.vtxlab.project.bc_product_data.controller.ValidListOperation;
@@ -11,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping("/admin")
 public class ValidListController implements ValidListOperation {
 
